@@ -1,10 +1,11 @@
 /**
  * MODULES
  */
-const express = require('express');                  /* Basic server configuration. */
-const consign = require('consign');                  /* Application paths handler.  */
-const bodyParser = require('body-parser');           /* Request's data parser.      */
-const expressSession = require('express-session');   /* Session manager.            */
+const express = require('express');                  			/* Basic server configuration. */
+const consign = require('consign');                  			/* Application paths handler.  */
+const bodyParser = require('body-parser');           			/* Request's data parser.      */
+const expressSession = require('express-session');   			/* Session manager.            */
+const SQLiteStore = require('connect-sqlite3')(expressSession); /* Store sessions in files.    */
 
 /**
  * SERVER
