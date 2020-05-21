@@ -1,133 +1,119 @@
-/*===============================IMPORT MODULES===============================*/
-const { check, validationResult } = require('express-validator'); /*Modulo responsável por fazer a validação dos dados que chegam nas requisições.*/
-/*============================================================================*/
+/**
+ * MODULES
+ */
+const { check, validationResult } = require('express-validator'); /* Request data validator. */
 
-/*===============================COMMON ROUTES================================*/
+
 module.exports = function (app) {
-
-/*=================================INDEX PAGE=================================*/
-    /** 
-     * =======================================================================
-     * |Route / responsável por retornar a pagina de index do usuário.       |
-     * =======================================================================
-    */
+    
+    /**
+     * INDEX:
+     * Returns index page.
+     */
     app.get('/', function (req, res) {
-        /*Redirecionamento para página de index.*/
         res.render("./main/index");
         return;
     });
-/*============================================================================*/
 
-/*=================================HOME PAGE==================================*/
-    /** 
-     * =======================================================================
-     * |Route login responsável por verificar se o usuário possuí sessão     |
-     * |aberta.                                                              |
-     * |Caso as condições sejam verdadeiras, retorna a pagina de home do     |
-     * |usuários, caso contrário, retorna a pagina de login.                 |
-     * =======================================================================
-    */
+    /**
+     * HOME:
+     * Returns user's home page if session is valid.
+     */
     app.get('/home', function (req, res) {
-        /*Atribuição da função isValid para validação do token.*/
-        const isValid = app.app.controllers.common.login.isValid;
-        /*Verificação se o usuário possui permissão para acessar essa rota.*/
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.main.login.isValid;
+
+        /* Checks route permission. */
         if (req.session.token != undefined       && 
-            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)) {
-            /*Renderiza tela de home do usúario.*/
-            res.render("./common/home");
+            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)
+        ) {
+            res.render("./main/home");
             return;
         }
+        /* If session is not valid, retuns login page. */
         else{
-            /*Redirecionamento para página de login pois não possui sessão aberta.*/
             res.redirect("/login");
             return;
         }
     });
-/*============================================================================*/
 
-/*==============================EDIT PASSWORD PAGE============================*/
-    /** 
-     * =======================================================================
-     * |Route editPassword responsável por verificar se o usuário possuí     |
-     * |sessão aberta.                                                       |
-     * |Caso as condições sejam verdadeiras, retorna a página de alteração   |
-     * |de senha do usuário.                                                 |
-     * =======================================================================
-    */
+
+    /**
+     * EDIT PASSWORD:
+     * If session is valid, returns change password page.
+     */
     app.get('/editPassword', function (req, res) {
-        /*Atribuição da função isValid para validação do token.*/
-        const isValid = app.app.controllers.common.login.isValid;
-        /*Verificação se o usuário possui sessão aberta para acessar essa rota.*/
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.main.login.isValid;
+
+        /* Checks route permission. */
         if (req.session.token != undefined       && 
-            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)) {
-            /*Renderiza tela de home do usúario.*/
+            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)
+        ) {
             res.render("./common/editPassword");
             return;
         }
+        /* If session is not valid, retuns login page. */
         else{
-            /*Redirecionamento para página de login pois não possui sessão aberta.*/
             res.redirect("/login");
             return;
         }
     });
-/*============================================================================*/
 
-/*===============================UPDATE PASSWORD==============================*/
-    /** 
-     * ========================================================================
-     * |Route updatePassword responsável por verificar se o usuário possuí    |
-     * |sessão aberta. Caso as condição sejam verdadeira, é verificado se os  |
-     * |dados enviados na requisição estão no formato correto, e realizado    |
-     * |a alteração da senha do usuário, caso contrário é retornado um erro.  |
-     * ========================================================================
-    */
-    app.post('/updatePassword', [check('oldPassword', 'Senha atual inválida!').not().isEmpty().escape().isString().isLength({ min: 8 }),
-                                check('newPassword', 'Senha nova inválida!')  .not().isEmpty().escape().isString().isLength({ min: 8 })], 
+
+    /**
+     * UPDATE PASSWORD:
+     * If session is valid, sends new password information to database.
+     */
+    app.post(
+        '/updatePassword', 
+        [
+            check('oldPassword', 'Invalid current password!').not().isEmpty().escape().isString().isLength({ min: 8 }),
+            check('newPassword', 'Invalid new password!').not().isEmpty().escape().isString().isLength({ min: 8 })
+        ], 
     function (req, res) {
-        /*Chamada da função que valida os dados da requisição.*/
-        const errors = validationResult(req)
-        /*Verificação se os parâmetros não apresentam inconsistências.*/            
+        /* Receives data validation errors, if any. */
+        const errors = validationResult(req);
+
+        /* If error, sends error message. */          
         if (!errors.isEmpty()) {
-            /*Envio da respostas.*/
             res.send({status: "error", msg: errors.array()});
             return;
         }
         else {
-            /*Chamada do controller parar realizar a autenticação de login e criação de sessão.*/
-            app.app.controllers.common.password.updatePassword(app, req, res);
+            /* Sends data for database, and creates new valid session. */
+            app.app.controllers.web.main.password.updatePassword(app, req, res);
         }
     });
-/*============================================================================*/
 
-/*===============================GET PERMISSION===============================*/
-    /** 
-     * =======================================================================
-     * |Route getPermissions responsável por verificar se o usuário possuí   |
-     * |sessão aberta.                                                       |
-     * |Caso as condições sejam verdadeiras, retorna a as permissões de      |
-     * |acesso do usuário, e seu perfil.                                     |
-     * =======================================================================
-    */
+    
+    /**
+     * GET PERMISSIONS:
+     * If session is valid, returns user permissions and profile.
+     */
     app.get('/getPermissions', function (req, res) {
-        /*Atribuição da função isValid para validação do token.*/
-        const isValid = app.app.controllers.common.login.isValid;
-        /*Verificação se o usuário possui sessão aberta para acessar essa rota.*/
-        if (req.session.token != undefined       && 
-            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)) {
-            /*Variável que conterá as permissões a serem enviadas para o usuário.*/
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.main.login.isValid;
+        
+        /* Checks route permission. */
+        if (
+            req.session.token != undefined && 
+            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)
+        ) {
+            /* Permissions list. */
             let permissions = [];
-            /*Loop responsável por recuperar apenas as permissões de acesso a páginas.*/
+
+            /* Populates permission list. */
             req.session.permissions.forEach(element => {
-                /*Verifição se o campo icon foi preenchido.*/
                 if(element.icon != null && element.icon != ""){
                     permissions.push(element);
                 }
             });
 
-            /*Chamada da função que torna o objeto user imutável.*/
+            /* Freezes object, making it unalterable. */
 	        Object.freeze(permissions);
 
-            /*Envio da respostas.*/
+            /* Sends permissions list and profile. */
             res.send({
                 status: "success",
                 msg: "Permissões recuperadas com sucesso!",
@@ -136,12 +122,9 @@ module.exports = function (app) {
             return;
         }
         else{
-            /*Envio da resposta.*/
-            res.send({status: "error", msg: "Acesso Negado!"});
+            res.send({status: "error", msg: "Access denied!"});
             return;
         }
     });
-/*============================================================================*/
 
 }
-/*============================================================================*/

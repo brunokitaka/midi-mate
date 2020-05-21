@@ -1,0 +1,43 @@
+<%include ../common/header.ejs%>
+
+
+<!-- CONTENT -->
+<header class="masthead">
+    <div class="container d-flex align-items-center">
+        <div class="mx-auto text-center">
+            <br>
+            <br>
+            <br>
+            <br>
+            <!-- <img src="images/gear.gif" alt="FIBO" style="width: 100% !important; height: 100% !important;"> -->
+        </div>
+    </div>
+</header>
+<!-- /CONTENT -->
+
+
+<%include ../common/footer.ejs%>
+
+<script>
+/*============================================================================*/
+    /**
+     * =======================================================
+     * |Função responsável executar todas as rotinas iniciais|
+     * |da página assim que ela é carregada.                 |
+     * =======================================================
+     */
+    window.onload = () => {
+        /*Chamada da função que busca as permissões do usuário.*/
+        getPermissions("", "");
+    };
+    $(document).ready(function () {
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    });
+/*============================================================================*/
+</script>
+
+</html>

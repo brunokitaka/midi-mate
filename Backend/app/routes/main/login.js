@@ -11,17 +11,17 @@ module.exports = function (app) {
     * Logs in users with valid sessions, if not, returns login page.
     */
     app.get('/login', function (req, res) {
-        /*Atribuição da função isValid para validação do token.*/
+        /* Gets isValid() instance. */
         const isValid = app.app.controllers.web.main.login.isValid;
-        /*Verificação se o usuário possui permissão para acessar essa rota.*/
+
+        /* Checks route permission. */
         if (req.session.token != undefined       && 
-            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)) {
-            /*Renderiza tela de home do usúario.*/
+            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)
+        ) {
             res.render("./main/home");
             return;
         }
         else{
-            /*Redirecionamento para página de login pois não possui sessão aberta.*/
             res.render("./main/login");
             return;
         }
@@ -39,16 +39,16 @@ module.exports = function (app) {
             check('password', 'Invalid password!').not().isEmpty().isLength({ min: 8, max: 32 })
         ], 
     function (req, res) {
-        /*Chamada da função que valida os dados da requisição.*/
-        const errors = validationResult(req)
-        /*Verificação se os parâmetros não apresentam inconsistências.*/            
+        /* Receives data validation errors, if any. */
+        const errors = validationResult(req);
+
+        /* If error, sends error message. */            
         if (!errors.isEmpty()) {
-            /*Envio da respostas.*/
             res.send({status: "error", msg: errors.array()});
             return;
         }
         else {
-            /*Chamada do controller parar realizar a autenticação de login e criação de sessão.*/
+            /* Sends data for database validation. */
             app.app.controllers.web.main.login.loginValidation(app, req, res);
         }
     });
@@ -58,7 +58,7 @@ module.exports = function (app) {
      * Kills current session.
      */
     app.get('/logout', function (req, res) {
-        /*Chamada do controller parar realizar a fechamento da sessão.*/
+        /* Calls controller that kill the session. */
         app.app.controllers.common.login.logout(app, req, res);
     });
 

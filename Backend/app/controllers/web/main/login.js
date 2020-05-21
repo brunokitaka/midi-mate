@@ -8,7 +8,7 @@ const token = require('token');     /* Session token.         */
 /**
  * TOKEN CONFIG
  */
-const tokenSecret = process.env.TOKEN_SECRET; /*Variável que contem o secret para geração do token.*/
+const tokenSecret = process.env.TOKEN_SECRET
 token.defaults.secret = tokenSecret;
 token.defaults.timeStep = 60 * 60;
 
@@ -62,7 +62,6 @@ module.exports.loginValidation = function (app, req, res) {
 
 	/* If email data is incorrect, sends error message. */
 	if(login.email == undefined || login.email == null || login.email == "") {
-		/*Envio da respostas*/
         returnPacket.status = "error";
         returnPacket.msg = "Check email input!";
         res.send(returnPacket);
@@ -71,7 +70,6 @@ module.exports.loginValidation = function (app, req, res) {
 	
 	/* If password data is incorrect, sends error message. */
     if(login.password == undefined || login.password == "" || login.password.length < 8){
-        /*Envio da respostas*/
         returnPacket.status = "error";
         returnPacket.msg = "Invalid passoword!";
         res.send(returnPacket);
@@ -175,7 +173,7 @@ module.exports.loginValidation = function (app, req, res) {
 							
 							/*Envio da respostas*/
 							returnPacket.status = "success";
-							returnPacket.msg = "Bem Vindo!";
+							returnPacket.msg = "Welcome!";
 							res.send(returnPacket);
 							return;
 						}
