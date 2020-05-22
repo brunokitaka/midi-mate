@@ -6,27 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Fibo</title>
-
-    <link rel="icon" type="image/png" href="images/fibo_icon.png" />
+    <title>MIDI Mate</title>
 
     <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Our Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="css/common/home.css">
+    <link rel="stylesheet" type="text/css" href="css/services.css">
 
     <!-- Font Awesome JS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     <!-- SELECT2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6/css/select2.min.css" rel="stylesheet" />
 
-    <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
-    <script src="js/common/axios/axios.min.js"></script>
-    <script src="js/common/sideBar.js"></script>
+    <script src="js/axios/axios.min.js"></script>
 
+    <link rel="icon" type="image/png" href="images/user/icon.png" />
 </head>
 
 <body>
@@ -35,37 +32,85 @@
 
         <!-- Sidebar -->
         <nav id="sidebar">
-            <div id="sidebar-title" class="sidebar-header">
+            <div class="sidebar-header" id="header-title">
+                Menu
             </div>
 
-            <ul id="sidebar-menu" class="list-unstyled components">
+            <ul class="list-unstyled components">
+                <li class="nav-item">
+                    <!-- href="/editUser"--><a href="#" style="color: #80d4ff !important;"><i class="fas fa-user-tie fa-1x"
+                            style="color: #80d4ff !important;"></i> &nbsp&nbsp Account</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a href="/listParkings" style="color: #80d4ff !important;"><i class="fas fa-parking fa-1x"
+                            style="color: #80d4ff !important;"></i> &nbsp&nbsp Listar Estacionamentos</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a href="/createParking" style="color: #80d4ff !important;"><i class="fas fa-plus fa-1x"
+                            style="color: #80d4ff !important;"></i> &nbsp&nbsp Cadastrar Estacionamento</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a href="/createDiscount" style="color: #80d4ff !important;"><i class="fas fa-percentage fa-1x"
+                            style="color: #80d4ff !important;"></i> &nbsp&nbsp Cadastrar Desconto</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a href="/listDiscounts" style="color: #80d4ff !important;"><i class="fas fa-list-ul fa-1x"
+                            style="color: #80d4ff !important;"></i> &nbsp&nbsp Listar Descontos</a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a href="#" style="color: #80d4ff !important;"><i class="fas fa-file-alt fa-1x"
+                            style="color: #80d4ff !important;"></i> &nbsp&nbsp Relatórios</a>
+                </li> -->
             </ul>
         </nav>
 
         <!-- Page Content -->
         <div id="content">
             <!-- NAVBAR -->
-            <nav id="border1" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #6e00b8;">
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn">
                         <i class="fas fa-bars" id="navtoggle"></i>
                     </button>
 
-                    <a href="/home" class="navbar-brand"><img src="/images/fibo_logo.png"></a>
+                    <a href="/home" class="navbar-brand"><img src="images/user/logo-1.png"></a>
 
                     <ul id="border2" class="nav navbar-nav ml-auto">
-                        <li class="nav-item" id="grid-menu">
+                        <!-- <li class="nav-item" id="grid-menu">
                             <div class="dropdown">
                                 <a id="dLabel" role="button" data-toggle="dropdown" data-target="#">
                                     <i class="fa fa-th fa-lg icon-grid"></i>
                                 </a>
                                 <div id="gridMenu" class="dropdown-menu dropdown-menu-right" role="menu"
-                                    aria-labelledby="dropdownMenu">
+                                    aria-labelledby="dropdownMenu" style="background-color: #263238 !important;">
+                                    <div class="dropdown-item blue-parkeen text-center">
+                                        <a href="/home"><i class="fas fa-building fa-2x"
+                                                style="color: #80d4ff !important;"></i></a>
+                                        <br>
+                                        <a href="/home" class="grid-link" style="color: #80d4ff !important;">Minha
+                                            Empresa</a>
+                                    </div>
+                                    <div class="dropdown-item blue-parkeen text-center">
+                                        <a href="#"><i class="fas fa-shopping-cart fa-2x"
+                                                style="color: #80d4ff !important;"></i></a>
+                                        <br>
+                                        <a href="#" class="grid-link" style="color: #80d4ff !important;">Produtos
+                                            Parkeen</a>
+                                    </div>
+                                    <div class="dropdown-item blue-parkeen text-center">
+                                        <a href="#"><i class="fas fa-envelope fa-2x"
+                                                style="color: #80d4ff !important;"></i></a>
+                                        <br>
+                                        <a href="#" class="grid-link" style="color: #80d4ff !important;">Mensagens</a>
+                                    </div>
                                 </div>
                             </div>
                         </li>
+                        &nbsp;
+                        &nbsp; -->
+
                         <li class="nav-item">
-                            <a href="/logout" id="logout" class="btn btn-primary">Sair</a>
+                            <a href="/logout" id="logout" class="btn blue-parkeen-back">Sair</a>
                         </li>
                     </ul>
                 </div>

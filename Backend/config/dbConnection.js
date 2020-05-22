@@ -20,10 +20,10 @@ const database = process.env.DB_NAME;
  * CONFIG
  */
 var connMySQL = function () {
-    if (conn_singleton !== null) {
-      return conn_singleton;
+    if (connection !== null) {
+      return connection;
     } else {
-      conn_singleton = mysql.createConnection({
+      connection = mysql.createConnection({
         host: host,
         port: port,
         user: user,
@@ -31,7 +31,7 @@ var connMySQL = function () {
         database: database,
         multipleStatements: true
       });
-      return conn_singleton;
+      return connection;
     }
   };
   

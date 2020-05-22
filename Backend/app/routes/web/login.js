@@ -12,31 +12,31 @@ module.exports = function (app) {
     */
     app.get('/login', function (req, res) {
         /* Gets isValid() instance. */
-        const isValid = app.app.controllers.web.main.login.isValid;
+        const isValid = app.app.controllers.web.login.isValid;
 
         /* Checks route permission. */
         if (req.session.token != undefined       && 
             isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)
         ) {
-            res.render("./main/home");
+            res.render("./user/home");
             return;
         }
         else{
-            res.render("./main/login");
+            res.render("./user/login");
             return;
         }
     });
 
 
     /**
-     * VALIDATE LOGIN:
+     * USER WEB AUTH:
      * Sends login page data for validation, if correct, user will be logged in.
      */
     app.post(
-        '/loginValidation', 
+        '/userWebAuth', 
         [
-            check('email', 'Check email input!').not().isEmpty().escape().isEmail(),
-            check('password', 'Invalid password!').not().isEmpty().isLength({ min: 8, max: 32 })
+            check('userEmail', 'Check email input!').not().isEmpty().escape().isEmail(),
+            check('userPassword', 'Invalid password!').not().isEmpty().isLength({ min: 8, max: 32 })
         ], 
     function (req, res) {
         /* Receives data validation errors, if any. */
@@ -49,7 +49,7 @@ module.exports = function (app) {
         }
         else {
             /* Sends data for database validation. */
-            app.app.controllers.web.main.login.loginValidation(app, req, res);
+            app.app.controllers.web.login.userWebAuth(app, req, res);
         }
     });
 
@@ -59,7 +59,7 @@ module.exports = function (app) {
      */
     app.get('/logout', function (req, res) {
         /* Calls controller that kill the session. */
-        app.app.controllers.common.login.logout(app, req, res);
+        app.app.controllers.web.login.logout(app, req, res);
     });
 
 }

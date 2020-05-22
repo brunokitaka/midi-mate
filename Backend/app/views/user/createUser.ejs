@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>MIDI Mate</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <link rel="icon" type="image/png" href="images/midi-mate-icon.png" />
+
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/cadastroUser.css">
+
+    <!-- Font Awesome JS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <script src="js/axios/axios.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #6e00b8;">
+        <div class="container">
+            
+            <a href="/"><img src="images/midi-mate-logo.png" class="navbar-brand js-scroll-trigger"></a>
+        </div>
+    </nav>
+    <div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="divCenterForm">
+            <h3>New user</h3>
+            <br>
+            <form action="javascript:insertUser()" method="POST">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Full name</label>
+                    <input type="text" name="userName" id="userName" class="form-control" maxlength="99" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-at"></i> Email</label>
+                    <input type="email" name="userEmail" id="userEmail" class="form-control" maxlength="50" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> Password</label>
+                    <input type="password" name="userPassword" id="userPassword" class="form-control" minlength="8" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> Confirm pasword</label>
+                    <input type="password" name="userPassword2" id="userPassword2" class="form-control" minlength="8" required>
+                </div>
+                <button class="btn blue-parkeen-back btnLeft" type="submit">Cadastrar</button>
+            </form>
+        </div>
+        <br><br><br>
+    </div>
+</body>
+
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous">
+</script>
+
+<!-- Javascript -->
+<script type="text/javascript">
+
+    function insertUser(){
+        const password = document.getElementById("userPassword").value;
+        const password2 = document.getElementById("userPassword2").value;
+        
+        if(password === password2){
+
+            let user = {
+                userName: document.getElementById("userName").value,
+                userEmail: document.getElementById("userEmail").value,
+                userPassword: document.getElementById("userPassword").value
+            }
+            
+            console.log(user);
+            if(user.userName.length > 99){
+                alert("Name too big!")
+                return;
+            } 
+            if(user.userEmail.length > 49){
+                alert("Email too big!")
+                return;
+            }
+            if(user.userPassword.length < 8){
+                alert("Password must have at least 8 numbers and/or letters!")
+                return;
+            }
+            if(user.userName.length <= 99 && user.userEmail.length <= 49 && user.userPassword.length >= 8){
+                axios.post("/insertUser", user)
+                .then((response) => {
+                    /* Checks response status */
+                    if (response.data.status == "success") {
+                        alert(response.data.msg);
+                        
+                        window.location.href = "/login"
+                    }
+                    else{
+                        
+                        /* Gets message(s) from response. */
+                        let msg = response.data.msg;
+
+                        /* Checks number of messages. */
+                        if(Array.isArray(response.data.msg)) {
+                            msg = "";
+
+                            /* Creates full message with 1 or more messages from response. */
+                            for (const i in response.data.msg) {
+                                msg += response.data.msg[i].msg;
+                                msg += "\n";
+                            }
+                        }
+
+                        /* Shows message. */
+                        alert(msg);
+                    }
+                })
+                .catch((error) => {
+                    /* If error. */
+                    alert("Server error, try again later.");
+                    console.log(error);
+                });
+            }
+        }
+        else {
+            alert("Passwords does not match!");
+        }
+    }
+</script>
+
+</html>

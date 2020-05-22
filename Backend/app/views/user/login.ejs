@@ -11,7 +11,7 @@
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
-    <link rel="icon" type="image/png" href="images/fibo_icon.png" />
+    <link rel="icon" type="image/png" href="images/midi-mate-icon.png" />
     
     <!-- Our Custom CSS -->
     <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -22,8 +22,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-    <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
-    <script src="js/common/axios/axios.min.js"></script>
+    <script src="js/axios/axios.min.js"></script>
 
 </head>
 
@@ -47,25 +46,23 @@
         <br>
         <br>
         <br>
-        <form id="formLogin" action="javascript:auth()" method="post">
-
-                <!-- <h1>Preencha os campos abaixo para logar.</h1> -->
-    
-                <div class="contentform">
-                    <div class="center">
-                        <div class="form-group">
-                            <p>Email<span>*</span></p>
-                            <span class="icon-case"><i class="fa fa-user center-icon"></i></span>
-                            <input type="email" id="email" name="email" value="" maxlength="127" required>
-                        </div>
-                        <div class="form-group">
-                            <p>Senha<span>*</span></p>
-                            <span class="icon-case"><i class="fa fa-key center-icon"></i></span>
-                            <input type="password" id="password" name="password" maxlength="32" required>
-                        </div>
+        <form id="formLogin" action="javascript:auth()" method="post">    
+            <div class="contentform">
+                <div class="center">
+                    <div class="form-group">
+                        <p>Email<span>*</span></p>
+                        <span class="icon-case"><i class="fa fa-user center-icon"></i></span>
+                        <input type="email" id="userEmail" name="userEmail" value="" maxlength="127" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin: 0 auto !important; display: block !important;">Entrar</button>
+                    <div class="form-group">
+                        <p>Senha<span>*</span></p>
+                        <span class="icon-case"><i class="fa fa-key center-icon"></i></span>
+                        <input type="password" id="userPassword" name="userPassword" minlength="8" required>
+                    </div>
+                    <a href="/createUser">Create Account</a>
                 </div>
+                <button type="submit" class="btn btn-primary" style="margin: 0 auto !important; display: block !important;">Entrar</button>
+            </div>
         </form>
         <!-- /CONTENT -->
     </div>
@@ -94,49 +91,52 @@
      */
     function auth() {
 
-        const user = {
-            email:    document.getElementById("email").value,
-            password: document.getElementById("password").value,
+        let user = {
+            userEmail: document.getElementById("userEmail").value,
+            userPassword: document.getElementById("userPassword").value,
         }
 
         /* Freezes object, making it unaterable. */
 		Object.freeze(user);
         
         /*Verificação se a senha possui o minímo de caracteres.*/
-        if(user.password.length < 8) {
-            alert("Senha incorreta!");
+        if(user.userPassword.length < 8) {
+            alert("Invalid passoword!");
             return;
         }
         else {
-            axios.post("/authLogin", user)
+            axios.post("/userWebAuth", user)
             .then((response) => {
-                /*Chamada da função que torna o objeto user imutável.*/
-				Object.freeze(response);
-                /*Tratamento do retorno.*/
+                
+                /* Freezes object, making it unalterable. */
+                Object.freeze(response);
+                
+                /* Checks return status. */
                 if (response.data.status == "success") {
-                    /*Redirecionamento para rota /home.*/
                     window.location.href = "/home"
                 }
                 else{
-                    /*Atribuição da mensagem de retorno do servidor.*/
+                    /* Gets message(s) from response. */
                     let msg = response.data.msg;
-                    /*Verificação se foi enviada mais de uma mensagem.*/
+
+                    /* Checks number of messages. */
                     if(Array.isArray(response.data.msg)) {
-                        /*Atribuição de string vazia a variável.*/
                         msg = "";
-                        /*Loop responsável por concatenar todas as mensagens enviadas.*/
+
+                        /* Creates full message with 1 or more messages from response. */
                         for (const i in response.data.msg) {
                             msg += response.data.msg[i].msg;
                             msg += "\n";
                         }
-                    } 
-                    /*Alertar o usuario, caso tenha ocorrido algum erro no servidor*/
+                    }
+
+                    /* Shows message. */
                     alert(msg);
                 }
             })
             .catch((error) => {
-                /*Tratamento de erro.*/
-                alert("ERROR");
+                /* If error. */
+                alert("Server error, try again later.");
                 console.log(error);
             });
         }
