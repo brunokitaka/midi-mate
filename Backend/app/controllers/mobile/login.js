@@ -23,15 +23,15 @@ module.exports.isValid = function (a, b) {
 
 
 /**
- * USER WEB AUTH:
+ * MOBILE LOGIN:
  * Compares login data with database.
  * If all matches, a new session is created. 
  */
-module.exports.userWebAuth = function (app, req, res) {
-	/* Data from request. */
+module.exports.mobileLogin = function (app, req, res) {
+    /* Data from request. */
 	const login = req.body;
 
-	/* Return packet standard composition. */
+    /* Return packet standard composition. */
 	let returnPacket = {
 		"status": "",
 		"msg": "",
@@ -40,19 +40,19 @@ module.exports.userWebAuth = function (app, req, res) {
 
 	/* Database connection. */
 	const connection = app.config.dbConnection();
-	const model = new app.app.models.web.login(connection);
+	const model = new app.app.models.mobile.login(connection);
 
 	/* Checks if the email exists in the databse. */
-	model.userWebAuth(login, function (error, result) {
-	
+	model.mobileLogin(login, function (error, result) {	
+
 		/* Checks for error. */
 		if (error) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + login.userEmail);
-			console.log("Controller: userWebAuth");
+			console.log("Email: " + login.email);
+			console.log("Controller: mobileLogin");
 			console.log("Msg: Error while searching for user!");
-			console.log("Error(userWebAuth): " + error);
+			console.log("Error(mobileLogin): " + error);
 			console.log("==================================================\n");
 			returnPacket.status = "error";
 			returnPacket.msg = "Error while searching for user!";
@@ -64,58 +64,42 @@ module.exports.userWebAuth = function (app, req, res) {
 		else if (empty(result)) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + login.userEmail);
-			console.log("Controller: userWebAuth");
+			console.log("Email: " + login.email);
+			console.log("Controller: mobileLogin");
 			console.log("Msg: No user was found!");
-			console.log("Error(userWebAuth): Result is empty" + result);
+			console.log("Error(mobileLogin): Result is empty " + result.rows);
 			console.log("==================================================\n");
 			returnPacket.status = "none";
 			returnPacket.msg = "User not found!";
             res.send(returnPacket);
             return;
 		} else {
+            
+            /* If user found, stored password hash is compared with login's. */
+            if (bcrypt.compareSync(login.password, result[0].userPassword)) {
 
-			/* If user found, stored password hash is compared with login's. */
-			if (bcrypt.compareSync(login.userPassword, result[0].userPassword)) {
-
-				/* Creates new session. */
-				req.session.email = result[0].userEmail;
-				req.session.idUser = result[0].idUser;
-				req.session.token = token.generate(req.session.email + req.session.idUser.toString());
-				
-				/* Response. */
-				returnPacket.status = "success";
-				returnPacket.msg = "Welcome!";
-				res.send(returnPacket);
-				return;
-			} 
-			/* If passwords don't match. */
-			else {
-				/* Response. */
-				returnPacket.status = "error";
-				returnPacket.msg = "Check login data!";
-				res.send(returnPacket);
-				return;
-			}
+                /* Creates new session. */
+                req.session.email = result[0].userEmail;
+                req.session.idUser = result[0].idUser;
+                req.session.token = token.generate(req.session.email + req.session.idUser.toString());
+                
+                /* Response. */
+                returnPacket.status = "success";
+                returnPacket.msg = "Welcome!";
+                returnPacket.data.idUser = result[0].idUser;
+                returnPacket.data.email = result[0].userEmail;
+                returnPacket.data.token = req.session.token;
+                res.send(returnPacket);
+                return;
+            } 
+            /* If passwords don't match. */
+            else {
+                /* Response. */
+                returnPacket.status = "error";
+                returnPacket.msg = "Check login data!";
+                res.send(returnPacket);
+                return;
+            }				
 		}
 	});
 }
-
-module.exports.logout = function (app, req, res) {
-
-	const isValid = app.app.controllers.web.login.isValid;
-
-    /*Verifica se o usuário possui uma sessão aberta.*/
-	if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
-
-		/*Remoção da session*/
-		req.session.destroy(res.render('user/login'));
-		return;
-	}
-	else {
-		res.render('user/login');
-		return;
-	}
-}
-
-
