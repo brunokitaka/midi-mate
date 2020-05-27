@@ -23,7 +23,9 @@ module.exports = function (app) {
             req.session.token != undefined && 
             isValid(req.session.email + req.session.idUser, req.session.token)
         ) {
+            console.log("==================================================");
             console.log("Received file " + req.file.originalname + " from user " + req.session.email);
+
             var fileName = req.file.originalname;
             var savePath = 'uploads/raw/' + req.session.idUser + "-" + req.file.originalname;
             var src = fs.createReadStream(req.file.path);
@@ -46,7 +48,7 @@ module.exports = function (app) {
                 fileName = fileName.split(".")[0];
                 
                 var cmd = "ffmpeg -i " + savePath + " " + "uploads/wav/" + fileName + ".wav";
-                console.log(cmd);
+                console.log("Running: " + cmd);
                 
                 exec(cmd, (error, stdout, stderr) => {
                     if (error) {
@@ -57,10 +59,13 @@ module.exports = function (app) {
                     if (stderr) {
                         // console.log("Error while converting file!");
                         // console.log(`stderr: ${stderr}`);
+                        console.log("File converted to .wav successfully!");
+                        console.log("==================================================");
                         return;
                     }
                     // console.log(`stdout: ${stdout}`);
                     console.log("File converted to .wav successfully!");
+                    console.log("==================================================");
                 });
             });
             
