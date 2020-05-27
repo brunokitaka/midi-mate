@@ -16,7 +16,7 @@ module.exports = function (app) {
 
         /* Checks route permission. */
         if (req.session.token != undefined       && 
-            isValid(req.session.email + req.session.profile + req.session.idAccount, req.session.token)
+            isValid(req.session.email + req.session.idUser, req.session.token)
         ) {
             res.render("./user/home");
             return;
