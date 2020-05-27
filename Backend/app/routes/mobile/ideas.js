@@ -2,9 +2,10 @@
  * MODULES
  */
 const { check, validationResult } = require('express-validator'); /* Request data validator. */
-var multer  = require('multer')
+var multer  = require('multer');
 var fs = require('fs');
-var upload = multer({ dest: 'uploads/' })
+var upload = multer({ dest: 'uploads/' });
+const { exec } = require("child_process");
 
 
 module.exports = function (app) {
@@ -23,9 +24,10 @@ module.exports = function (app) {
             isValid(req.session.email + req.session.idUser, req.session.token)
         ) {
             console.log("Received file " + req.file.originalname + " from user " + req.session.email);
-
+            var fileName = req.file.originalname;
+            var savePath = 'uploads/raw/' + req.session.idUser + "-" + req.file.originalname;
             var src = fs.createReadStream(req.file.path);
-            var dest = fs.createWriteStream('uploads/' + req.session.idUser + "-" + req.file.originalname);
+            var dest = fs.createWriteStream(savePath);
 
             src.pipe(dest);
 
@@ -38,6 +40,28 @@ module.exports = function (app) {
                         "data": {}
                     }
                 );
+
+                console.log("File saved!");                
+
+                fileName = fileName.split(".")[0];
+                
+                var cmd = "ffmpeg -i " + savePath + " " + "uploads/wav/" + fileName + ".wav";
+                console.log(cmd);
+                
+                exec(cmd, (error, stdout, stderr) => {
+                    if (error) {
+                        console.log("Error while converting file!");
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        // console.log("Error while converting file!");
+                        // console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    // console.log(`stdout: ${stdout}`);
+                    console.log("File converted to .wav successfully!");
+                });
             });
             
             src.on('error', function(err) { res.json('Something went wrong!'); });
