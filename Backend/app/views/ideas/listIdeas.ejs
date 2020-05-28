@@ -1,0 +1,136 @@
+<%- include ("../main/header.ejs")%>
+
+
+<!-- CONTENT -->
+<br><br><br><br>
+<div class="container">
+    <div class="row">
+        <input class="form-control col-md-7" type="text" id="searchIdea" onkeyup="searchIdea()"
+            placeholder="Search by name...">
+    </div>
+    <br>
+    <div class="table-responsive">
+        <table class="table" id="table">
+            <thead id="tableHeader">
+                <th>Name</th>
+                <th style="color: white">111111111111111</th>
+                <th style="color: white">111111111111111</th>
+                <th></th>
+                <th></th>
+            </thead>
+            <tbody id="list">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- /CONTENT -->
+
+
+<%- include ("../main/footer.ejs")%>
+
+<script>
+    
+    window.onload = () => {
+        selectUserIdeas();
+    };
+    $(document).ready(function () {
+        /*Chamada da função que ativa a side bar.*/
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+    
+
+    function searchIdea() {
+        const input = document.getElementById("searchIdea");
+        const filter = input.value.toUpperCase(); 
+        const table = document.getElementById("table");
+        const tr = table.getElementsByTagName("tr");
+
+        let txtValue;
+        let td;
+
+        
+        for (let i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    
+    function selectUserIdeas() {
+
+        axios.post("/selectUserIdeas")
+            .then(function (response) {
+                
+                Object.freeze(response);
+                
+                if (response.data.status == "success") {
+                    
+                    const ideas = response.data.data;
+                    const list = document.getElementById("list");
+                    const tableHeader = document.getElementById("tableHeader");
+                    console.log(ideas);                    
+                    list.innerHTML = "";
+                    tableHeader.innerHTML = "";
+                    tableHeader.innerHTML = templateHeaderIdea();
+                    ideas.forEach(element => {
+                        list.innerHTML += templateListIdea(element);
+                    });
+                } else {
+                    
+                    let msg = response.data.msg;
+                    
+                    if (Array.isArray(response.data.msg)) {
+                        msg = "";
+                        for (const i in response.data.msg) {
+                            msg += response.data.msg[i].msg;
+                            msg += "\n";
+                        }
+                    }
+                    alert(msg);
+                }
+            })
+            .catch(function (error) {
+                /*Tratamento de erro.*/
+                alert("ERROR");
+                console.log(error);
+            });
+    }
+
+    
+    function templateHeaderIdea() {
+        return `
+                <th>Name</th>
+                <th style="color: white">111111111111111</th>
+                <th style="color: white">111111111111111</th>
+                <th></th>
+                <th></th>
+            `;
+    }
+    
+
+    function templateListIdea(idea) {
+        return `
+                <td>${idea.ideaName}</td>
+                <td style="color: white">111111111111111</td>
+                <td style="color: white">111111111111111</td>
+                <td>
+                    <i class="btn fas fa-search btn-primary" onClick=""></i>
+                </td>
+                <td>
+                    <i class="btn fas fa-trash btn-danger" onClick=""></i>
+                </td>
+            `;
+    }
+    
+</script>
+
+</html>
