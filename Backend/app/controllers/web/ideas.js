@@ -2,6 +2,7 @@
  * MODULES
  */
 const empty = require('is-empty');  /* Check if data's empty. */
+const fs = require("fs");
 
 
 /**
@@ -53,7 +54,6 @@ module.exports.selectUserIdeas = function (app, req, res) {
             res.send(returnPacket);
             return;
 		} else {
-			
 			/* Response. */
 			returnPacket.status = "success";
 			returnPacket.data = result;

@@ -33,6 +33,11 @@
     
     window.onload = () => {
         selectUserIdeas();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        idFridge = urlParams.get('idIdea');
+        console.log(idIdea);
     };
     $(document).ready(function () {
         /*Chamada da função que ativa a side bar.*/
@@ -115,16 +120,6 @@
                 <th></th>
             `;
     }
-
-
-    function templateHeaderFile() {
-        return `
-                <th>Name</th>
-                <th style="color: white">111111111111111</th>
-                <th style="color: white">111111111111111</th>
-                <th></th>
-            `;
-    }
     
 
     function templateListIdea(idea) {
@@ -133,21 +128,10 @@
                 <td style="color: white">111111111111111</td>
                 <td style="color: white">111111111111111</td>
                 <td>
-                    <i class="btn fas fa-search btn-primary" onClick="ideaPage(${idea})></i>
+                    <i class="btn fas fa-search btn-primary" onClick=""></i>
                 </td>
                 <td>
                     <i class="btn fas fa-trash btn-danger" onClick=""></i>
-                </td>
-            `;
-    }
-
-    function templateListFiles(file) {
-        return `
-                <td>${idea.ideaName}</td>
-                <td style="color: white">111111111111111</td>
-                <td style="color: white">111111111111111</td>
-                <td>
-                    <i class="btn fas fa-download btn-primary"><a href="/downLoadUserFile?file=\"${file.ideaPath}\"&type=${type}"" target="_blank"></a></i>
                 </td>
             `;
     }

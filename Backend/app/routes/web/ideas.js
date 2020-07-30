@@ -41,4 +41,42 @@ module.exports = function (app) {
             return;
         }
     });
+
+    // /**
+    //  * IDEA PAGE:
+    //  * Idea info page.
+    //  */
+    // app.get('/idea', function (req, res) {
+    //     /* Gets isValid() instance. */
+    //     const isValid = app.app.controllers.web.login.isValid;
+
+    //     /* Checks route permission. */
+    //     if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
+    //         res.render("./ideas/idea")
+    //     }
+    //     /* If session is not valid. */
+    //     else {
+    //         res.send({status: "error", msg: "Access denied!"});
+    //         return;
+    //     }
+    // });
+
+    /**
+     * DOWNLOAD USER FILE:
+     * Sends file to be downloaded.
+     */
+    app.get('/downLoadUserFile', function (req, res) {
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.login.isValid;
+
+        /* Checks route permission. */
+        if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
+            app.app.controllers.web.ideas.downLoadUserFile(app, req, res);
+        }
+        /* If session is not valid. */
+        else {
+            res.send({status: "error", msg: "Access denied!"});
+            return;
+        }
+    });
 }

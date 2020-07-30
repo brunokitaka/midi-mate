@@ -2,9 +2,9 @@
  * MODULES
  */
 const { check, validationResult } = require('express-validator'); /* Request data validator. */
-var multer  = require('multer');
-var fs = require('fs');
-var upload = multer({ dest: 'uploads/' });
+let multer  = require('multer');
+let fs = require('fs');
+let upload = multer({ dest: 'uploads/' });
 const { exec } = require("child_process");
 
 
@@ -26,10 +26,10 @@ module.exports = function (app) {
             console.log("==================================================");
             console.log("Received file " + req.file.originalname + " from user " + req.session.email);
 
-            var fileName = req.file.originalname;
-            var savePath = 'uploads/raw/' + req.session.idUser + "-" + req.body.idIdea + "-" + req.file.originalname;
-            var src = fs.createReadStream(req.file.path);
-            var dest = fs.createWriteStream(savePath);
+            let fileName = req.file.originalname;
+            let savePath = 'uploads/raw/' + req.session.idUser + "-" + req.body.idIdea + "-" + req.file.originalname;
+            let src = fs.createReadStream(req.file.path);
+            let dest = fs.createWriteStream(savePath);
 
             src.pipe(dest);
 
@@ -49,7 +49,7 @@ module.exports = function (app) {
                 let ideaName = fileName;
                 fileName = req.session.idUser + "-" + req.body.idIdea + "-" + fileName;
                 
-                var cmd = "ffmpeg -i " + savePath + " " + "uploads/wav/" + fileName + ".wav";
+                let cmd = "ffmpeg -i " + savePath + " " + "uploads/wav/" + fileName + ".wav";
                 console.log("Running: " + cmd);
                 
                 exec(cmd, (error, stdout, stderr) => {
@@ -65,22 +65,38 @@ module.exports = function (app) {
                         );
                         return;
                     }
-                    // if (stderr) {
-                    //     // console.log("Error while converting file!");
-                    //     // console.log(`stderr: ${stderr}`);
-                    // }
-                    // console.log(`stdout: ${stdout}`);
+                    
                     console.log("File converted to .wav successfully!");
-                    console.log("==================================================");
 
-                    let ideaInfo = {
-                        "id": req.body.idIdea,
-                        "name": ideaName,
-                        "path": fileName,
-                        "idUser": req.session.idUser
-                    };
-
-                    app.app.controllers.mobile.ideas.insertIdea(app, req, res, ideaInfo);
+                    let wavPath = "uploads/wav/" + fileName + ".wav"
+                    let midiSavePath = "uploads/midi/" + filename + ".mid"
+                    let cmdMidi = "audio-to-midi " + wavPath + " " + "-o " + midiSavePath + "--time-window 480 --activation-level 0.0 -s -c";
+                    exec(cmdMidi, (error, stdout, stderr) => {
+                        if (error) {
+                            console.log("Error while converting file to midi!");
+                            console.log(`error: ${error.message}`);
+                            res.send(
+                                {
+                                    "status": "error",
+                                    "msg": "Could not convert file to midi.",
+                                    "data": {}
+                                }
+                            );
+                            return;
+                        }
+                        
+                        console.log("File converted to .mid successfully!");
+                        console.log("==================================================");
+    
+                        let ideaInfo = {
+                            "id": req.body.idIdea,
+                            "name": ideaName,
+                            "path": fileName,
+                            "idUser": req.session.idUser
+                        };
+    
+                        app.app.controllers.mobile.ideas.insertIdea(app, req, res, ideaInfo);
+                    });
                 });
             });
             
