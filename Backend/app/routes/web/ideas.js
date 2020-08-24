@@ -71,7 +71,33 @@ module.exports = function (app) {
 
         /* Checks route permission. */
         if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
-            app.app.controllers.web.ideas.downLoadUserFile(app, req, res);
+            // app.app.controllers.web.ideas.downLoadUserFile(app, req, res);
+            let path = req.query.file;
+            let type = req.query.type;
+
+            console.log(path);
+            console.log(type);
+
+            switch(type){
+                /* Original Recording: .wav */
+                case "0":
+                    console.log("downloading 0");
+                    // res.download("uploads/wav/" + path + ".wav");
+                    res.download("uploads/wav/" + path + ".wav", path);    
+                    break;
+                /* Original MIDI: .midi */
+                case "1":
+                    console.log("downloading 1");
+                    // res.download("uploads/midi/" + path + ".mid");
+                    res.download("uploads/midi/" + path + ".mid", path);
+                    break;
+                /* Suggestion: .midi */
+                case "2":
+                    res.end()
+                    break;
+                default:
+                    res.send({status: "error", msg: "Invalid File!"})
+            }
         }
         /* If session is not valid. */
         else {

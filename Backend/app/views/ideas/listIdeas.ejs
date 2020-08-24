@@ -12,11 +12,7 @@
     <div class="table-responsive">
         <table class="table" id="table">
             <thead id="tableHeader">
-                <th>Name</th>
-                <th style="color: white">111111111111111</th>
-                <th style="color: white">111111111111111</th>
-                <th></th>
-                <th></th>
+
             </thead>
             <tbody id="list">
 
@@ -65,6 +61,10 @@
         }
     }
     
+    /**
+     * SELECT USER IDEAS:
+     * Searches and lists all user's ideas.
+     */
     function selectUserIdeas() {
 
         axios.post("/selectUserIdeas")
@@ -105,6 +105,76 @@
             });
     }
 
+    /**
+     * SELECT FILES:
+     * List idea's files for download.
+     */
+    function selectFiles(idIdea, ideaName, ideaPath) {
+        let idea = {
+            "idIdea":idIdea,
+            "ideaName":ideaName,
+            "ideaPath":ideaPath
+        };
+
+        const list = document.getElementById("list");
+        const tableHeader = document.getElementById("tableHeader");
+
+        list.innerHTML = "";
+        tableHeader.innerHTML = "";
+
+        tableHeader.innerHTML = templateHeaderFile();
+
+        let files = [
+            {
+                name: idea.ideaName + " (Original Recording)",
+                type: "0"
+            }, 
+            {
+                name: idea.ideaName + " (Original midi)",
+                type: "1"
+            }, 
+            {
+                name: idea.ideaName + " (Suggestion)",
+                type: "2"
+            }
+        ];
+
+        files.forEach(element => {
+            list.innerHTML += templateListFile(element, idea);
+        });
+    }
+
+    function downloadFile(link, filename, type) {
+        console.log(link);
+        axios.get(link, {responseType: 'arraybuffer'})
+            .then(function (response) {                
+                if(type == 0){
+                    console.log("wav")
+                    const url = window.URL.createObjectURL(new Blob([response.data]), { type: 'audio/wav' });
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', filename + '.wav');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                }
+                else{
+                    const url = window.URL.createObjectURL(new Blob([response.data]), { type: 'audio/midi' });
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', filename + '.mid');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                }
+            })
+            .catch(function (error) {
+                /*Tratamento de erro.*/
+                alert("ERROR");
+                console.log(error);
+            });
+    }
+
     
     function templateHeaderIdea() {
         return `
@@ -116,24 +186,13 @@
             `;
     }
 
-
-    function templateHeaderFile() {
-        return `
-                <th>Name</th>
-                <th style="color: white">111111111111111</th>
-                <th style="color: white">111111111111111</th>
-                <th></th>
-            `;
-    }
-    
-
     function templateListIdea(idea) {
         return `
                 <td>${idea.ideaName}</td>
                 <td style="color: white">111111111111111</td>
                 <td style="color: white">111111111111111</td>
                 <td>
-                    <i class="btn fas fa-search btn-primary" onClick="ideaPage(${idea})></i>
+                    <i class="btn fas fa-search btn-primary" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
                 </td>
                 <td>
                     <i class="btn fas fa-trash btn-danger" onClick=""></i>
@@ -141,13 +200,24 @@
             `;
     }
 
-    function templateListFiles(file) {
+
+    function templateHeaderFile() {
         return `
-                <td>${idea.ideaName}</td>
+                <th>File</th>
+                <th style="color: white">111111111111111</th>
+                <th style="color: white">111111111111111</th>
+                <th></th>
+            `;
+    }
+
+    function templateListFile(file, idea) {
+        let downloadLink = "/downLoadUserFile?file=" + idea.ideaPath + "&type=" + file.type;
+        return `
+                <td>${file.name}</td>
                 <td style="color: white">111111111111111</td>
                 <td style="color: white">111111111111111</td>
                 <td>
-                    <i class="btn fas fa-download btn-primary"><a href="/downLoadUserFile?file=\"${file.ideaPath}\"&type=${type}"" target="_blank"></a></i>
+                    <i class="btn fas fa-download btn-primary" onClick="downloadFile('${downloadLink}','${file.name}',${file.type})"></i>
                 </td>
             `;
     }

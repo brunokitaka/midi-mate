@@ -72,19 +72,19 @@ a:focus {
 }
 
 #sidebar {
-    background: #263238;
+    background: white; /*#263238;*/
     color: rgb(1, 139, 211);
     transition: all 0.3s;
 }
 
 #sidebar .sidebar-header {
     padding: 80px 10px 10px 10px;
-    background: #263238;
+    background: white; /*#263238;*/
     color: rgb(1, 139, 211) !important;
 }
 
 #sidebar ul.components {
-    background: #263238;
+    background: white; /*#263238;*/
 }
 
 #sidebar ul p {
@@ -109,13 +109,13 @@ a:focus {
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
     color: rgb(1, 139, 211) !important;
-    background: #263238;
+    background: white; /*#263238;*/
 }
 
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #263238;
+    background: white; /*#263238;*/
 }
 
 #content .navbar-brand {
@@ -172,7 +172,8 @@ a img {
 }
 
 #border1{
-    background-color: #263238 !important;
+    /* background-color: #263238 !important; */
+    background-color: white !important;
 }
 
 .divCenterForm{
