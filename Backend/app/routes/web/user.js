@@ -83,10 +83,10 @@ module.exports = function (app) {
 
 
     /**
-     * UPDATE USER:
+     * UPDATE USER WITH PASSWORD:
      * Sends updated user data to database.
      */
-    app.post('/updateUser', 
+    app.post('/updateUserWithPassword', 
         [
             check('userName', 'Invalid Name!').not().isEmpty().escape(),
             check('userEmail', 'Invalid email!').not().isEmpty().isEmail(), 
@@ -108,7 +108,7 @@ module.exports = function (app) {
                 return;
             }
             else {
-                app.app.controllers.web.user.updateUser(app, req, res);
+                app.app.controllers.web.user.updateUserWithPassword(app, req, res);
             }
         }
         /* If session is not valid, retuns login page. */
@@ -117,51 +117,59 @@ module.exports = function (app) {
             return;
         }
     });
+
+    /**
+     * UPDATE USER WITHOUT PASSWORD:
+     * Sends updated user data to database.
+     */
+    app.post('/updateUserWithoutPassword', 
+        [
+            check('userName', 'Invalid Name!').not().isEmpty().escape(),
+            check('userEmail', 'Invalid email!').not().isEmpty().isEmail()
+        ], 
+    function (req, res) {
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.login.isValid;
+
+        /* Checks route permission. */
+        if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
+            
+            /* Receives data validation errors, if any. */
+            const errors = validationResult(req)
+            
+            /* If error, sends error message. */           
+            if (!errors.isEmpty()) {
+                res.send({status: "error", msg: errors.array()});
+                return;
+            }
+            else {
+                app.app.controllers.web.user.updateUserWithoutPassword(app, req, res);
+            }
+        }
+        /* If session is not valid, retuns login page. */
+        else {
+            res.send({status: "error", msg: "Access denied!"});
+            return;
+        }
+    });
+
+
+    /**
+     * GET USER INFO:
+     * Returns user info.
+     */
+    app.get('/getUserInfo', function (req, res) {
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.login.isValid;
+
+        /* Checks route permission. */
+        if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
+            app.app.controllers.web.user.getUserInfo(app, req, res);
+        }
+        /* If session is not valid, retuns login page. */
+        else{
+            res.render("./user/login");
+            return;
+        }
+    });
 }
-
-// /**
-//      * EDIT PASSWORD:
-//      * If session is valid, returns change password page.
-//      */
-//     app.get('/editPassword', function (req, res) {
-//         /* Gets isValid() instance. */
-//         const isValid = app.app.controllers.web.main.login.isValid;
-
-//         /* Checks route permission. */
-//         if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token))
-//         {
-//             res.render("./common/editPassword");
-//             return;
-//         }
-//         /* If session is not valid, retuns login page. */
-//         else{
-//             res.redirect("/login");
-//             return;
-//         }
-//     });
-
-
-//     /**
-//      * UPDATE PASSWORD:
-//      * If session is valid, sends new password information to database.
-//      */
-//     app.post(
-//         '/updatePassword', 
-//         [
-//             check('oldPassword', 'Invalid current password!').not().isEmpty().escape().isString().isLength({ min: 8 }),
-//             check('newPassword', 'Invalid new password!').not().isEmpty().escape().isString().isLength({ min: 8 })
-//         ], 
-//     function (req, res) {
-//         /* Receives data validation errors, if any. */
-//         const errors = validationResult(req);
-
-//         /* If error, sends error message. */          
-//         if (!errors.isEmpty()) {
-//             res.send({status: "error", msg: errors.array()});
-//             return;
-//         }
-//         else {
-//             /* Sends data for database, and creates new valid session. */
-//             app.app.controllers.web.main.password.updatePassword(app, req, res);
-//         }
-//     });

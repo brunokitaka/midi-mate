@@ -201,11 +201,11 @@ a img {
 }
 
 label{
-    color: white;
+    color: black;
 }
 
 h3, h5{
-    color: rgba(1, 139, 211) !important;
+    color: black(1, 139, 211) !important;
 }
 
 hr{

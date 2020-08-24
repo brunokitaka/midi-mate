@@ -1,0 +1,187 @@
+<%- include ("../main/header.ejs")%>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <br><br><br>
+
+    <div class="divCenterForm">
+        <h3>Changing Account Info</h3>
+        <br>
+        <form action="javascript:editUser()" method="POST">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Full name</label>
+                <input type="text" name="userName" id="userName" class="form-control" maxlength="99" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-at"></i> Email</label>
+                <input type="email" name="userEmail" id="userEmail" class="form-control" maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-key"></i> Password</label>
+                <input type="password" name="userPassword" id="userPassword" class="form-control" minlength="8">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-key"></i> Confirm pasword</label>
+                <input type="password" name="userPassword2" id="userPassword2" class="form-control" minlength="8">
+            </div>
+            <button class="btn blue-parkeen-back btnLeft" type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <br>
+    <br>
+
+
+</div>
+<!-- /CONTENT -->
+
+<%- include ("../main/footer.ejs")%>
+
+<script>
+    
+    window.onload = () => {
+        getUserInfo();
+    };
+    $(document).ready(function () {
+        /*Chamada da função que ativa a side bar.*/
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+
+    function getUserInfo() {
+        axios.get("/getUserInfo")
+            .then(function (response) {
+                if (response.data.status == "success") {
+                    let data = response.data.data;
+                    console.log(response.data);
+                    
+                    document.getElementById("userName").value = data.userName;
+                    document.getElementById("userEmail").value = data.userEmail;
+                    
+                } else {
+                    /* Gets message(s) from response. */
+                    let msg = response.data.msg;
+
+                    /* Checks number of messages. */
+                    if(Array.isArray(response.data.msg)) {
+                        msg = "";
+
+                        /* Creates full message with 1 or more messages from response. */
+                        for (const i in response.data.msg) {
+                            msg += response.data.msg[i].msg;
+                            msg += "\n";
+                        }
+                    }
+
+                    /* Shows message. */
+                    alert(msg);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("ERROR" + error);
+            });
+        }
+
+        function editUser() {
+            const password = document.getElementById("userPassword").value;
+            const password2 = document.getElementById("userPassword2").value;
+            
+            if (password != "" && password2 != "") {
+                console.log(password)
+                console.log(password2)
+                if (password === password2) {
+                    let user = {
+                        userName: document.getElementById("userName").value,
+                        userEmail: document.getElementById("userEmail").value,
+                        userPassword: document.getElementById("userPassword").value
+                    }
+
+                    if(user.userName.length > 99){
+                        alert("Name too big!")
+                        return;
+                    } 
+                    if(user.userEmail.length > 49){
+                        alert("Email too big!")
+                        return;
+                    }
+                    if(user.userPassword.length < 8){
+                        alert("Password must have at least 8 numbers and/or letters!")
+                        return;
+                    }
+                    
+                    axios.post("/updateUserWithPassword", user)
+                        .then((response) => {
+                            // Tratamento do retorno
+                            if (response.data.status == "success") {
+                                alert(response.data.msg);
+                                window.location.href = "/home";
+                            } else {
+                                /* Gets message(s) from response. */
+                                let msg = response.data.msg;
+
+                                /* Checks number of messages. */
+                                if(Array.isArray(response.data.msg)) {
+                                    msg = "";
+
+                                    /* Creates full message with 1 or more messages from response. */
+                                    for (const i in response.data.msg) {
+                                        msg += response.data.msg[i].msg;
+                                        msg += "\n";
+                                    }
+                                }
+
+                                /* Shows message. */
+                                alert(msg);
+                            }
+                        })
+                        .catch((error) => {
+                            // Tratamento de erro
+                            alert("ERROR" + error);
+                            console.log(error);
+                        });
+                } else {
+                    alert("Passwords does not match!");
+                }
+            } else {
+                let user = {
+                    userName: document.getElementById("userName").value,
+                    userEmail: document.getElementById("userEmail").value,
+                }
+
+                axios.post("/updateUserWithoutPassword", user)
+                    .then((response) => {
+                        // Tratamento do retorno
+                        if (response.data.status == "success") {
+                            alert(response.data.msg);
+                            window.location.href = "/home";
+                        } else {
+                            /* Gets message(s) from response. */
+                            let msg = response.data.msg;
+
+                            /* Checks number of messages. */
+                            if(Array.isArray(response.data.msg)) {
+                                msg = "";
+
+                                /* Creates full message with 1 or more messages from response. */
+                                for (const i in response.data.msg) {
+                                    msg += response.data.msg[i].msg;
+                                    msg += "\n";
+                                }
+                            }
+
+                            /* Shows message. */
+                            alert(msg);
+                        }
+                    })
+                    .catch((error) => {
+                        // Tratamento de erro
+                        alert("ERROR" + error);
+                        console.log(error);
+                    });
+            }
+        }
+
+</script>

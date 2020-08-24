@@ -4,7 +4,7 @@ function model(connection) {
 }
 
 /**
- * USER WEB AUTH:
+ * INSERT USER:
  * Inserts new user data.
  */
 model.prototype.insertUser = function (user, callback) {
@@ -18,10 +18,10 @@ model.prototype.insertUser = function (user, callback) {
 }
 
 /**
- * USER WEB AUTH:
+ * UPDATE USER WITH PASSWORD:
  * Updates user data.
  */
-model.prototype.updateUser = function (user, callback) {
+model.prototype.updateUserWithPassword = function (user, callback) {
     this._connection.query(
         'UPDATE user SET ' +
         'userName     = \'' + user.userName     + '\', ' +
@@ -30,6 +30,28 @@ model.prototype.updateUser = function (user, callback) {
         'WHERE idUser = ' + user.idUser,
         callback
     );
+}
+
+/**
+ * UPDATE USER WITHOUT PASSWORD:
+ * Updates user data.
+ */
+model.prototype.updateUserWithoutPassword = function (user, callback) {
+    this._connection.query(
+        'UPDATE user SET ' +
+        'userName     = \'' + user.userName     + '\', ' +
+        'userEmail    = \'' + user.userEmail    + '\' ' +
+        'WHERE idUser = ' + user.idUser,
+        callback
+    );
+}
+
+/**
+ * GET USER INFO:
+ * Selects user data.
+ */
+model.prototype.getUserInfo = function (user, callback) {
+    this._connection.query('SELECT * FROM user WHERE idUser = ' + user, callback);
 }
 
 module.exports = function () {
