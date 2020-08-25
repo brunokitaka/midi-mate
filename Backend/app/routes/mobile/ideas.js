@@ -69,7 +69,7 @@ module.exports = function (app) {
                     console.log("File converted to .wav successfully!");
 
                     let wavPath = "uploads/wav/" + fileName + ".wav"
-                    let midiSavePath = "uploads/midi/" + filename + ".mid"
+                    let midiSavePath = "uploads/midi/" + fileName + ".mid"
                     let cmdMidi = "audio-to-midi " + wavPath + " " + "-o " + midiSavePath + "--time-window 480 --activation-level 0.0 -s -c";
                     exec(cmdMidi, (error, stdout, stderr) => {
                         if (error) {
