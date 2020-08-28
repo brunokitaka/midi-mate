@@ -41,9 +41,10 @@ ul ul a {
 }
 
 a img {
-    max-width: 80px;
+    /* max-width: 80px;
     margin-top: -7px;
-    margin-left: 0.1rem;
+    margin-left: 0.1rem; */
+    max-width: 100%;
 }
 
 #navtoggle {
