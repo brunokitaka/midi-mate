@@ -1,9 +1,17 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
 body {
-  margin: auto;
+  /* margin: auto;
   background-image: url("../../images/user/background.jpg");
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif; */
+  margin: 0;
+  font-family: "Merriweather", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-image: url("../../images/template/bcg.jpg");
 }
 
 
@@ -137,10 +145,12 @@ a {
 }
 
 h3{
-  color: rgba(1, 139, 211) !important;
+  /* color: rgba(1, 139, 211) !important; */
+  color: white !important;
 }
 
 .blue-parkeen-back{
-  background-color: rgb(1, 139, 211) !important;
+  /* background-color: rgb(1, 139, 211) !important; */
+  background-color: var(--purple) !important;
   color: white;
 }
