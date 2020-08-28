@@ -177,26 +177,40 @@
 
     
     function templateHeaderIdea() {
+        // return `
+        //         <th>Name</th>
+        //         <th style="color: white"></th>
+        //         <th style="color: white"></th>
+        //         <th></th>
+        //         <th></th>
+        //     `;
         return `
-                <th>Name</th>
-                <th style="color: white">111111111111111</th>
-                <th style="color: white">111111111111111</th>
-                <th></th>
-                <th></th>
+            <th>Name</th>
+            <th style="color: white"></th>
+            <th style="color: white"></th>
+            <th></th>
             `;
     }
 
     function templateListIdea(idea) {
+        // return `
+        //         <td>${idea.ideaName}</td>
+        //         <td style="color: white"></td>
+        //         <td style="color: white"></td>
+        //         <td>
+        //             <i class="btn fas fa-search btn-primary" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+        //         </td>
+        //         <td>
+        //             <i class="btn fas fa-trash btn-danger" onClick=""></i>
+        //         </td>
+        //     `;
         return `
-                <td>${idea.ideaName}</td>
-                <td style="color: white">111111111111111</td>
-                <td style="color: white">111111111111111</td>
-                <td>
-                    <i class="btn fas fa-search btn-primary" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
-                </td>
-                <td>
-                    <i class="btn fas fa-trash btn-danger" onClick=""></i>
-                </td>
+            <td>${idea.ideaName}</td>
+            <td style="color: white"></td>
+            <td style="color: white"></td>
+            <td>
+                <i class="btn fas fa-search btn-primary" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+            </td>
             `;
     }
 
@@ -204,8 +218,8 @@
     function templateHeaderFile() {
         return `
                 <th>File</th>
-                <th style="color: white">111111111111111</th>
-                <th style="color: white">111111111111111</th>
+                <th style="color: white"></th>
+                <th style="color: white"></th>
                 <th></th>
             `;
     }
@@ -214,8 +228,8 @@
         let downloadLink = "/downLoadUserFile?file=" + idea.ideaPath + "&type=" + file.type;
         return `
                 <td>${file.name}</td>
-                <td style="color: white">111111111111111</td>
-                <td style="color: white">111111111111111</td>
+                <td style="color: white"></td>
+                <td style="color: white"></td>
                 <td>
                     <i class="btn fas fa-download btn-primary" onClick="downloadFile('${downloadLink}','${file.name}',${file.type})"></i>
                 </td>

@@ -51,7 +51,7 @@ a[data-toggle="collapse"] {
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: url("../../images/user/background.jpg");
+    background: url("../images/template/bcg.jpg");
     /* background: #fafafa; */
 }
 
@@ -73,14 +73,16 @@ a:focus {
 
 #sidebar {
     background: white; /*#263238;*/
-    color: rgb(1, 139, 211);
+    /* color: rgb(1, 139, 211); */
+    color: rgba(73, 73, 73, 0.7);;
     transition: all 0.3s;
 }
 
 #sidebar .sidebar-header {
     padding: 80px 10px 10px 10px;
     background: white; /*#263238;*/
-    color: rgb(1, 139, 211) !important;
+    /* color: rgb(1, 139, 211) !important; */
+    color: black !important;
 }
 
 #sidebar ul.components {
@@ -88,14 +90,15 @@ a:focus {
 }
 
 #sidebar ul p {
-    color: rgb(1, 139, 211) !important;
+    /* color: rgb(1, 139, 211) !important; */
+    color: rgba(73, 73, 73, 0.7) !important;
     font-weight: 300 !important;
     font-size: 1.1em !important;
     padding-left: 10px;
 }
 
 #sidebar ul li a {
-    color: rgb(1, 139, 211) !important;
+    color: rgba(73, 73, 73, 0.7) !important;
     padding: 10px;
     font-size: 1.1em;
     display: block;
@@ -103,12 +106,12 @@ a:focus {
 
 #sidebar ul li a:hover {
     color: rgb(1, 139, 211) !important;
-    background: #3f4e55;
+    background: #a8a8a8;
 }
 
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
-    color: rgb(1, 139, 211) !important;
+    color: rgba(73, 73, 73, 0.7) !important;
     background: white; /*#263238;*/
 }
 
@@ -154,7 +157,9 @@ a img {
 }
 
 .blue-parkeen-back{
-    background-color: rgb(1, 139, 211) !important;
+    /* background-color: rgb(1, 139, 211) !important; */
+    background-color: #6f42c1 !important;
+    border-color: #6f42c1 !important;
     color: white;
 }
 
@@ -201,11 +206,13 @@ a img {
 }
 
 label{
-    color: black;
+    /* color: black; */
+    color: white;
 }
 
 h3, h5{
-    color: black(1, 139, 211) !important;
+    /* color: black(1, 139, 211) !important; */
+    color: white !important;
 }
 
 hr{
@@ -214,4 +221,16 @@ hr{
 
 #as{
     color:white;
+}
+
+th, td{
+    color: white;
+}
+
+th{
+    background-color: rgba(255, 255, 255, 0.39);
+}
+
+table{
+    min-width: 30rem;
 }
