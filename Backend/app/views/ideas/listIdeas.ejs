@@ -4,7 +4,9 @@
 <!-- CONTENT -->
 <br><br><br><br>
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin: 0 auto;">
+        <a id="back-button" href="/listIdeas" class="btn blue-parkeen-back"><i class="fa fa-arrow-left"></i></a>
+        <div id="back-div" class="col-md-2"></div>
         <input class="form-control col-md-7" type="text" id="searchIdea" onkeyup="searchIdea()"
             placeholder="Search by name...">
     </div>
@@ -28,6 +30,12 @@
 <script>
     
     window.onload = () => {
+        const backButton = document.getElementById("back-button");
+        const backDiv = document.getElementById("back-div");
+
+        backButton.style.display = "none";
+        backDiv.style.display = "none";
+        
         selectUserIdeas();
     };
     $(document).ready(function () {
@@ -119,10 +127,16 @@
         const list = document.getElementById("list");
         const tableHeader = document.getElementById("tableHeader");
 
+        const backButton = document.getElementById("back-button");
+        const backDiv = document.getElementById("back-div");
+
+        backButton.style.display = "";
+        backDiv.style.display = "";
+
         list.innerHTML = "";
         tableHeader.innerHTML = "";
 
-        tableHeader.innerHTML = templateHeaderFile();
+        tableHeader.innerHTML = templateHeaderFile(ideaName);
 
         let files = [
             {
@@ -208,16 +222,16 @@
             <td>${idea.ideaName}</td>
             <td style="color: white"></td>
             <td style="color: white"></td>
-            <td>
-                <i class="btn fas fa-search btn-primary" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+            <td style="padding-left: 55%">
+                <i class="btn fas fa-search blue-parkeen-back" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
             </td>
             `;
     }
 
 
-    function templateHeaderFile() {
+    function templateHeaderFile(ideaName) {
         return `
-                <th>File</th>
+                <th>File (${ideaName})</th>
                 <th style="color: white"></th>
                 <th style="color: white"></th>
                 <th></th>
@@ -231,7 +245,7 @@
                 <td style="color: white"></td>
                 <td style="color: white"></td>
                 <td>
-                    <i class="btn fas fa-download btn-primary" onClick="downloadFile('${downloadLink}','${file.name}',${file.type})"></i>
+                    <i class="btn fas fa-download blue-parkeen-back" onClick="downloadFile('${downloadLink}','${file.name}',${file.type})"></i>
                 </td>
             `;
     }

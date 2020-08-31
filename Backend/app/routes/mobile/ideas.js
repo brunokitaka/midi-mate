@@ -84,18 +84,46 @@ module.exports = function (app) {
                             );
                             return;
                         }
-                        
+
                         console.log("File converted to .mid successfully!");
-                        console.log("==================================================");
-    
-                        let ideaInfo = {
-                            "id": req.body.idIdea,
-                            "name": ideaName,
-                            "path": fileName,
-                            "idUser": req.session.idUser
-                        };
-    
-                        app.app.controllers.mobile.ideas.insertIdea(app, req, res, ideaInfo);
+
+                        let suggestionsOutputDir = "uploads/suggestion"
+                        let cmdGenerateSuggestions = "melody_rnn_generate \\" +
+                                                     "--config=attention_rnn \\" +
+                                                     "--run_dir=magenta/melody_rnn/logdir/run1 \\" +
+                                                     "--output_dir=" + suggestionsOutputDir + " \\" +
+                                                     "--num_outputs=3 \\" +
+                                                     "--num_steps=128 \\" +
+                                                     "--hparams=\"batch_size=64,rnn_layer_sizes=[64,64]\" \\" +
+                                                     "--primer_midi=" + midiSavePath;
+                        exec(cmdGenerateSuggestions, (error, stdout, stderr) => {
+                            if (error) {
+                                console.log("Error while generating suggestions!");
+                                console.log(`error: ${error.message}`);
+                                res.send(
+                                    {
+                                        "status": "error",
+                                        "msg": "Could not generate suggestions.",
+                                        "data": {}
+                                    }
+                                );
+                                return;
+                            }
+
+                            console.log(stdout);
+                            
+                            console.log("Suggestions successfully generated!");
+                            console.log("==================================================");
+        
+                            let ideaInfo = {
+                                "id": req.body.idIdea,
+                                "name": ideaName,
+                                "path": fileName,
+                                "idUser": req.session.idUser
+                            };
+        
+                            app.app.controllers.mobile.ideas.insertIdea(app, req, res, ideaInfo);
+                        });
                     });
                 });
             });
