@@ -11,10 +11,11 @@ CREATE TABLE user(
 
 CREATE TABLE idea(
      idIdea INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-     appId INT NOT NULL,
+     appId INT,
      ideaName VARCHAR(100) NOT NULL,   
      ideaPath VARCHAR(100) UNIQUE NOT NULL,
      idUser INT NOT NULL,
+     ideaSource INT NOT NULL, -- 1-app, 2-web
      CONSTRAINT fk_idea_id_user
         FOREIGN KEY (idUser) 
         REFERENCES user (idUser)
