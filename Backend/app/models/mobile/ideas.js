@@ -9,8 +9,8 @@ function model(connection) {
  */
 model.prototype.insertIdea = function (idea, callback) {
 	this._connection.query(
-        'INSERT INTO idea(appId, ideaName, ideaPath, idUser) VALUES ' + 
-        `(${idea.id}, "${idea.name}", "${idea.path}", ${idea.idUser})`, 
+        'INSERT INTO idea(appId, ideaName, ideaPath, idUser, ideaSource) VALUES ' + 
+        `(${idea.id}, "${idea.name}", "${idea.path}", ${idea.idUser}, 1)`, 
         callback
     );
 }
