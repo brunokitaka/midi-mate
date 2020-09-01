@@ -148,8 +148,16 @@
                 type: "1"
             }, 
             {
-                name: idea.ideaName + " (Suggestion)",
+                name: idea.ideaName + " (Suggestion 1)",
                 type: "2"
+            },
+            {
+                name: idea.ideaName + " (Suggestion 2)",
+                type: "3"
+            },
+            {
+                name: idea.ideaName + " (Suggestion 3)",
+                type: "4"
             }
         ];
 
@@ -239,7 +247,7 @@
     }
 
     function templateListFile(file, idea) {
-        let downloadLink = "/downLoadUserFile?file=" + idea.ideaPath + "&type=" + file.type;
+        let downloadLink = "/downLoadUserFile?file=" + idea.ideaPath + "&type=" + file.type + "&idIdea=" + idea.idIdea;
         return `
                 <td>${file.name}</td>
                 <td style="color: white"></td>

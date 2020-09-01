@@ -34,7 +34,7 @@ module.exports = function (app) {
             console.log("Received file " + req.file.originalname + " from user " + req.session.email);
 
             let fileName = req.file.originalname;
-            let savePath = 'uploads/raw/' + req.session.idUser + "-" + req.body.idIdea + "-" + req.file.originalname;
+            let savePath = 'uploads/raw/' + req.session.idUser + "-" + req.file.originalname;
             let src = fs.createReadStream(req.file.path);
             let dest = fs.createWriteStream(savePath);
 
@@ -54,7 +54,7 @@ module.exports = function (app) {
 
                 fileName = fileName.split(".")[0];
                 let ideaName = fileName;
-                fileName = req.session.idUser + "-" + req.body.idIdea + "-" + fileName;
+                fileName = req.session.idUser + "-" + fileName;
 
                 ideaProcessing(savePath, fileName);
 

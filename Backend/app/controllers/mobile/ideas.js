@@ -121,9 +121,9 @@ module.exports.deleteIdea = function (app, req, res, ideaInfo) {
 			
 			// TODO: Erase suggestion!
 			
-			let wavFilePath = "uploads/wav/" + req.session.idUser + "-" + idea.idIdea + "-" + idea.name + ".wav";
-			let rawFilePath = "uploads/raw/" + req.session.idUser + "-" + idea.idIdea + "-" + idea.name + ".m4a";		
-			let midiFilePath = "uploads/midi/" + req.session.idUser + "-" + idea.idIdea + "-" + idea.name + ".mid";		
+			let wavFilePath = "uploads/wav/" + req.session.idUser + "-" + idea.name + ".wav";
+			let rawFilePath = "uploads/raw/" + req.session.idUser + "-" + idea.name + ".m4a";		
+			let midiFilePath = "uploads/midi/" + req.session.idUser + "-" + idea.name + ".mid";
 
 			fs.unlinkSync(wavFilePath);
 			fs.unlinkSync(rawFilePath);		
