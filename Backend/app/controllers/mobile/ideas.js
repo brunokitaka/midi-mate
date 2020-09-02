@@ -132,7 +132,24 @@ module.exports.deleteIdea = function (app, req, res) {
 				fs.unlinkSync(wavFilePath);
 				fs.unlinkSync(rawFilePath);		
 				fs.unlinkSync(midiFilePath);
-				rimraf.sync(suggestionsFolderPath);
+				rimraf(suggestionsFolderPath, function(error){
+					if(error){
+						console.log("==================================================");
+						console.log("DateTime: " + Date(Date.now()).toString());
+						console.log("Email: " + req.session.email);
+						console.log("Controller: deleteIdeaMobile");
+						console.log("Msg: Error whiile deleting folder!");
+						console.log("Error: " + error);
+						console.log("==================================================\n");
+					}
+					else{
+						/* Response. */
+						returnPacket.status = "success";
+						returnPacket.msg = "Idea deleted successfully!";
+						res.send(returnPacket);
+						return;	
+					}
+				});
 			}
 			catch(error){
 				console.log("==================================================");
@@ -142,13 +159,12 @@ module.exports.deleteIdea = function (app, req, res) {
 				console.log("Msg: Error whiile deleting files!");
 				console.log("Error: " + error);
 				console.log("==================================================\n");
-			}
-			
-			/* Response. */
-            returnPacket.status = "success";
-            returnPacket.msg = "Idea deleted successfully!";
-            res.send(returnPacket);
-            return;			
+				/* Response. */
+				returnPacket.status = "success";
+				returnPacket.msg = "Idea deleted successfully!";
+				res.send(returnPacket);
+				return;		
+			}	
 		}
 	});
 }

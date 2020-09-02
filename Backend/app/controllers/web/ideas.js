@@ -183,11 +183,30 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 		} else {
 					
 			let midiFilePath = "uploads/midi/" + req.session.idUser + "-" + idea.name + ".mid";
-			let suggestionsFolderPath = "uploads/suggestion/" + idea.idIdeaApp + "/";
+			let suggestionsFolderPath = "uploads/suggestion/" + idea.idIdeaApp;
 
 			try{	
+				console.log("Deleting " + midiFilePath);
 				fs.unlinkSync(midiFilePath);
-				rimraf.sync(suggestionsFolderPath);
+				console.log("Deleting " + suggestionsFolderPath);
+				rimraf(suggestionsFolderPath, function(error){
+					if(error){
+						console.log("==================================================");
+						console.log("DateTime: " + Date(Date.now()).toString());
+						console.log("Email: " + req.session.email);
+						console.log("Controller: deleteIdeaWeb");
+						console.log("Msg: Error whiile deleting folder!");
+						console.log("Error: " + error);
+						console.log("==================================================\n");
+					}
+					else{
+						/* Response. */
+						returnPacket.status = "success";
+						returnPacket.msg = "Idea deleted successfully!";
+						res.send(returnPacket);
+						return;	
+					}
+				});
 			}
 			catch(error){
 				console.log("==================================================");
@@ -197,13 +216,13 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 				console.log("Msg: Error whiile deleting files!");
 				console.log("Error: " + error);
 				console.log("==================================================\n");
-			}
-			
-			/* Response. */
-            returnPacket.status = "success";
-            returnPacket.msg = "Idea deleted successfully!";
-            res.send(returnPacket);
-            return;			
+
+				/* Response. */
+				returnPacket.status = "success";
+				returnPacket.msg = "Idea deleted successfully!";
+				res.send(returnPacket);
+				return;		
+			}	
 		}
 	});
 }
