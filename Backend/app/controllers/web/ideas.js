@@ -24,7 +24,6 @@ module.exports.insertIdeaWeb = function (app, req, res, ideaInfo, savePath) {
 
 	/* Checks if the email exists in the databse. */
 	model.insertIdea(ideaInfo, function (error, result) {	
-
 		/* Checks for error. */
 		if (error) {
 			console.log("==================================================");
@@ -125,6 +124,82 @@ module.exports.selectUserIdeas = function (app, req, res) {
 	});
 }
 
+/**
+ * DELETE IDEA WEB:
+ * Deletes user's record, idea and suggestions.
+ */
+module.exports.deleteIdeaWeb = function (app, req, res) {
+	/* Data from request. */
+	let idea = req.body;
+
+	idea.idUser = req.session.idUser;
+
+	/* Freezes object, making it unalterable. */
+	Object.freeze(idea);
+
+    /* Return packet standard composition. */
+	let returnPacket = {
+		"status": "",
+		"msg": "",
+		"data": {}
+	};
+
+	/* Database connection. */
+	const connection = app.config.dbConnection();
+	const model = new app.app.models.web.ideas(connection);
+
+	/* Checks if the email exists in the databse. */
+	model.deleteIdea(idea, function (error, result) {
+
+		/* Checks for error. */
+		if (error) {
+			console.log("==================================================");
+			console.log("DateTime: " + Date(Date.now()).toString());
+			console.log("Email: " + req.session.userEmail);
+			console.log("Controller: deleteIdeaWeb");
+			console.log("Msg: Error while deleting idea!");
+			console.log("Error(deleteIdea): " + error);
+			console.log("==================================================\n");
+			returnPacket.status = "error";
+			returnPacket.msg = "Error while deleting idea!";
+			returnPacket.data = error;
+            res.send(returnPacket);
+            return;
+		} 
+		/* Checks if database response is empty. */
+		else if (empty(result)) {
+			console.log("==================================================");
+			console.log("DateTime: " + Date(Date.now()).toString());
+			console.log("Email: " + req.session.userEmail);
+			console.log("Controller: deleteIdeaWeb");
+			console.log("Msg: No idea was deleted!");
+			console.log("Error(deleteIdea): Result is empty " + result.rows);
+			console.log("==================================================\n");
+			returnPacket.status = "none";
+			returnPacket.msg = "No idea was deleted!";
+            res.send(returnPacket);
+            return;
+		} else {
+			
+			let wavFilePath = "uploads/wav/" + req.session.idUser + "-" + idea.name + ".wav";
+			let rawFilePath = "uploads/raw/" + req.session.idUser + "-" + idea.name + ".m4a";		
+			let midiFilePath = "uploads/midi/" + req.session.idUser + "-" + idea.name + ".mid";
+			let suggestionsFolderPath = "uploads/suggestion/" + idea.idIdeaApp + "/";
+
+			fs.unlinkSync(wavFilePath);
+			fs.unlinkSync(rawFilePath);		
+			fs.unlinkSync(midiFilePath);
+			rimraf.sync(suggestionsFolderPath);
+			
+			/* Response. */
+            returnPacket.status = "success";
+            returnPacket.msg = "Idea deleted successfully!";
+            res.send(returnPacket);
+            return;			
+		}
+	});
+}
+
 async function ideaProcessing(savePath, idIdea) {
 	let suggestionsOutputDir = "uploads/suggestion/" + idIdea;
 	let cmdGenerateSuggestions = "melody_rnn_generate \\" +
@@ -139,6 +214,7 @@ async function ideaProcessing(savePath, idIdea) {
 	console.log("==================================================");
 	console.log("Running: " + cmdGenerateSuggestions);
 	exec(cmdGenerateSuggestions, (error, stdout, stderr) => {
+		console.log(stdout)
 		if (error) {
 			console.log("Error while generating suggestions!");
 			console.log(`error: ${error.message}`);
@@ -154,11 +230,11 @@ async function ideaProcessing(savePath, idIdea) {
 		
 
 		/* Rename magenta output to sequntial numbers (1,2,3) */
-		let renameCmd = "a=1 \\" + 
-						"for i in uploads/suggestion/" + idIdea + "/*.mid; do \\" +
-						"new=$(printf \"%d.mid\" \"$a\") \\" +
-						"mv -i -- \"$i\" \"$new\" \\" +
-						"let a=a+1 \\" +
+		let renameCmd = "a=1 \n" + 
+						"for i in uploads/suggestion/" + idIdea + "/*.mid; do \n" +
+						"new=$(printf \"uploads/suggestion/%d.mid\" \"$a\") \n" +
+						"mv -i -- \"$i\" \"$new\" \n" +
+						"let a=a+1 \n" +
 						"done"
 		exec(renameCmd, (error, stdout, stderr) => {
 			if(error){

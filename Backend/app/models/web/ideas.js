@@ -17,10 +17,18 @@ model.prototype.selectUserIdeas = function (idUser, callback) {
  */
 model.prototype.insertIdea = function (idea, callback) {
 	this._connection.query(
-        'INSERT INTO idea(ideaName, ideaPath, idUser) VALUES ' + 
-        `("${idea.name}", "${idea.path}", ${idea.idUser})`, 
+        'INSERT INTO idea(ideaName, ideaPath, idUser, ideaSource) VALUES ' + 
+        `("${idea.name}", "${idea.path}", ${idea.idUser}, 2)`, 
         callback
     );
+}
+
+/**
+ * DELETE IDEA:
+ * Deletes idea.
+ */
+model.prototype.deleteIdea = function (idea, callback) {
+	this._connection.query('DELETE FROM idea WHERE idIdea = ' + idea.idIdeaWeb + " AND idUser = " + idea.idUser, callback);
 }
 
 

@@ -16,11 +16,11 @@ model.prototype.insertIdea = function (idea, callback) {
 }
 
 /**
- * USER WEB AUTH:
+ * DELETE IDEA:
  * Deletes idea.
  */
 model.prototype.deleteIdea = function (idea, callback) {
-	this._connection.query('DELETE FROM idea WHERE appId = ' + idea.idIdea + " AND idUser = " + idea.idUser, callback);
+	this._connection.query('DELETE FROM idea WHERE appId = ' + idea.idIdeaApp + " AND idUser = " + idea.idUser, callback);
 }
 
 /**

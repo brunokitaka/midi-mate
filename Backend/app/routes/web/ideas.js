@@ -1,7 +1,10 @@
 /**
  * MODULES
  */
-const { check, validationResult } = require('express-validator'); /* Request data validator. */
+const {
+    check,
+    validationResult
+} = require('express-validator'); /* Request data validator. */
 let multer = require('multer');
 let fs = require('fs');
 let upload = multer({
@@ -36,7 +39,7 @@ module.exports = function (app) {
      * INSERT IDEA:
      * Receives new idea data and MIDI file.
      */
-    app.post('/insertIdea', upload.single("record"), function (req, res) {
+    app.post('/insertIdeaWeb', upload.single("midi"), function (req, res) {
         /* Gets isValid() instance. */
         const isValid = app.app.controllers.web.login.isValid;
 
@@ -50,25 +53,25 @@ module.exports = function (app) {
 
             let fileName = req.file.originalname;
             // let savePath = 'uploads/midi/' + req.session.idUser + req.file.originalname;
-            let savePath = 'uploads/midi/' + req.session.idUser + req.ideaName;
+            let savePath = 'uploads/midi/' + req.session.idUser + "-" + req.body.ideaName + ".mid";
             let src = fs.createReadStream(req.file.path);
             let dest = fs.createWriteStream(savePath);
 
             src.pipe(dest);
-            
+
             src.on('end', function () {
                 fs.unlinkSync(req.file.path);
 
                 console.log("File saved!");
 
-                fileName = req.session.idUser + "-" + req.ideaName;
+                fileName = req.session.idUser + "-" + req.body.ideaName;
 
                 let ideaInfo = {
-                    "name": req.ideaName,
+                    "name": req.body.ideaName,
                     "path": fileName,
                     "idUser": req.session.idUser
                 };
-    
+
                 app.app.controllers.web.ideas.insertIdeaWeb(app, req, res, ideaInfo, savePath);
             });
 
@@ -78,7 +81,7 @@ module.exports = function (app) {
                     "msg": "Could not save file.",
                     "data": {}
                 });
-            });                
+            });
 
         } else {
             res.send({
@@ -122,7 +125,10 @@ module.exports = function (app) {
         }
         /* If session is not valid. */
         else {
-            res.send({status: "error", msg: "Access denied!"});
+            res.send({
+                status: "error",
+                msg: "Access denied!"
+            });
             return;
         }
     });
@@ -145,35 +151,72 @@ module.exports = function (app) {
             console.log(path);
             console.log(type);
 
-            switch(type){
+            switch (type) {
                 /* Original Recording: .wav */
                 case "0":
-                    res.download("uploads/wav/" + path + ".wav");    
+                    res.download("uploads/wav/" + path + ".wav");
                     break;
-                /* Original MIDI: .midi */
+                    /* Original MIDI: .midi */
                 case "1":
                     res.download("uploads/midi/" + path + ".mid");
                     break;
-                /* Suggestion 1: .midi */
+                    /* Suggestion 1: .midi */
                 case "2":
                     res.download("uploads/suggestion/" + idIdea + "/1.mid");
                     break;
-                /* Suggestion 2: .midi */
+                    /* Suggestion 2: .midi */
                 case "3":
                     res.download("uploads/suggestion/" + idIdea + "/2.mid");
                     break;
-                /* Suggestion 3: .midi */
+                    /* Suggestion 3: .midi */
                 case "4":
                     res.download("uploads/suggestion/" + idIdea + "/3.mid");
                     break;
                 default:
-                    res.send({status: "error", msg: "Invalid File!"})
+                    res.send({
+                        status: "error",
+                        msg: "Invalid File!"
+                    })
             }
         }
         /* If session is not valid. */
         else {
-            res.send({status: "error", msg: "Access denied!"});
+            res.send({
+                status: "error",
+                msg: "Access denied!"
+            });
             return;
         }
     });
+
+    /**
+     * DELETE IDEA WEB:
+     * Deletes user's record, idea and suggestions.
+     */
+    app.post('/deleteIdeaWeb',
+        [
+            check('idIdeaWeb', 'Invalid ID!').not().isEmpty().isNumeric(),
+        ],
+        function (req, res) {
+            /* Gets isValid() instance. */
+            const isValid = app.app.controllers.web.login.isValid;
+
+            /* Checks route permission. */
+            if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
+
+                /* Receives data validation errors, if any. */
+                const errors = validationResult(req)
+
+                /* If error, sends error message. */
+                if (!errors.isEmpty()) {
+                    res.send({
+                        status: "error",
+                        msg: errors.array()
+                    });
+                    return;
+                } else {
+                    app.app.controllers.web.ideas.deleteIdeaWeb(app, req, res);
+                }
+            }
+        });
 }

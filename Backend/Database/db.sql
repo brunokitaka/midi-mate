@@ -1,5 +1,5 @@
 CREATE database midimate;
-USE midimate
+USE midimate;
 
 CREATE TABLE user(
      idUser INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -30,10 +30,4 @@ CREATE TABLE suggestion(
         FOREIGN KEY (idIdea) 
         REFERENCES idea (idIdea)
 );
-
--- INSERTS --
-
-INSERT INTO account (email, password, idProfile)
-VALUES
-('admin@email.com', '$2a$10$Z6tzeJuBMTS5rvqfX3.5Nuramr7Pp0fbAnXAKiuyzgeitNADsGzNG', 1);
 

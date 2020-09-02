@@ -6,6 +6,7 @@ const consign = require('consign');                  			/* Application paths han
 const bodyParser = require('body-parser');           			/* Request's data parser.      */
 const expressSession = require('express-session');   			/* Session manager.            */
 const SQLiteStore = require('connect-sqlite3')(expressSession); /* Store sessions in files.    */
+const multer = require("multer");
 
 /**
  * SERVER

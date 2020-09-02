@@ -1,0 +1,135 @@
+<%- include ("../main/header.ejs")%>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <br><br><br><br>
+
+    <div class="divCenterForm">
+        <h3>Create a New Idea</h3>
+        <br>
+        <form action="javascript:createIdea()" method="POST">
+            <div class="form-group">
+                <label><i class="fas fa-pencil-alt"></i> Idea name</label>
+                <input type="text" name="ideaName" id="ideaName" class="form-control" maxlength="99" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-music"></i>
+                    <input type="file" class="form-control" name="midi" id="midi" accept="audio/midi" required>
+                </label>
+            </div>
+            <button class="btn blue-parkeen-back btnLeft" type="submit">Create</button>
+        </form>
+    </div>
+
+    <br>
+    <br>
+
+
+</div>
+<!-- /CONTENT -->
+
+<%- include ("../main/footer.ejs")%>
+
+<script>
+    let allIdeas;
+    window.onload = () => {
+        selectUserIdeas();
+    };
+    $(document).ready(function () {
+        /*Chamada da função que ativa a side bar.*/
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+
+    /**
+     * SELECT USER IDEAS:
+     * Searches and lists all user's ideas.
+     */
+    function selectUserIdeas() {
+
+        axios.post("/selectUserIdeas")
+            .then(function (response) {
+
+                Object.freeze(response);
+
+                if (response.data.status == "success") {
+
+                    allIdeas = response.data.data;
+
+                    console.log(allIdeas);
+                    
+                } else {
+
+                    // let msg = response.data.msg;
+
+                    // if (Array.isArray(response.data.msg)) {
+                    //     msg = "";
+                    //     for (const i in response.data.msg) {
+                    //         msg += response.data.msg[i].msg;
+                    //         msg += "\n";
+                    //     }
+                    // }
+                    // alert(msg);
+                }
+            })
+            .catch(function (error) {
+                /*Tratamento de erro.*/
+                alert("ERROR");
+                console.log(error);
+            });
+    }
+
+    function createIdea(){
+        const ideaName = document.getElementById("ideaName").value;
+        let flag = false;
+        if(allIdeas != undefined){
+            allIdeas.forEach(element => {
+                if(element.ideaName === ideaName){
+                    flag = true;
+                    alert("You've already created an idea with this name!");                
+                }
+            });
+        }
+
+        if(flag == true){
+            flag = false;
+            return;
+        }
+
+        var formData = new FormData();
+        const imagefile = document.querySelector("#midi");
+        formData.append("midi", imagefile.files[0]);
+        formData.append("ideaName", ideaName);
+        axios.post('/insertIdeaWeb', formData, {
+            headers: {
+                "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+            }
+        })
+        .then(function (response) {
+            if (response.data.status == "success") {
+                alert(response.data.msg);
+            } 
+            else {
+
+                let msg = response.data.msg;
+
+                if (Array.isArray(response.data.msg)) {
+                    msg = "";
+                    for (const i in response.data.msg) {
+                        msg += response.data.msg[i].msg;
+                        msg += "\n";
+                    }
+                }
+                alert(msg);
+            }
+        })
+        .catch(function(error){
+            /*Tratamento de erro.*/
+            alert("ERROR");
+            console.log(error);
+        });
+    }
+</script>

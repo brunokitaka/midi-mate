@@ -56,8 +56,6 @@ module.exports = function (app) {
                 let ideaName = fileName;
                 fileName = req.session.idUser + "-" + fileName;
 
-                ideaProcessing(savePath, fileName);
-
                 let ideaInfo = {
                     "id": req.body.idIdea,
                     "name": ideaName,
@@ -65,7 +63,7 @@ module.exports = function (app) {
                     "idUser": req.session.idUser
                 };
 
-                app.app.controllers.mobile.ideas.insertIdea(app, req, res, ideaInfo);
+                app.app.controllers.mobile.ideas.insertIdea(app, req, res, ideaInfo, savePath, fileName);
             });
 
             src.on('error', function (err) {
@@ -91,12 +89,12 @@ module.exports = function (app) {
      */
     app.post('/deleteIdea',
         [
-            check('idIdea', 'Invalid ID!').not().isEmpty().isNumeric(),
+            check('idIdeaApp', 'Invalid ID!').not().isEmpty().isNumeric(),
             check('name', 'Invalid name!').not().isEmpty().escape()
         ],
         function (req, res) {
             /* Gets isValid() instance. */
-            const isValid = app.app.controllers.web.login.isValid;
+            const isValid = app.app.controllers.mobile.login.isValid;
 
             /* Checks route permission. */
             if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
@@ -116,70 +114,4 @@ module.exports = function (app) {
                 }
             }
         });
-
-    async function ideaProcessing(savePath, fileName) {
-        let cmd = "ffmpeg -i " + savePath + " " + "uploads/wav/" + fileName + ".wav";
-        console.log("Running: " + cmd);
-
-        exec(cmd, (error, stdout, stderr) => {
-            if (error) {
-                console.log("Error while converting file!");
-                console.log(`error: ${error.message}`);
-                res.send({
-                    "status": "error",
-                    "msg": "Could not convert file.",
-                    "data": {}
-                });
-                return;
-            }
-
-            console.log("File converted to .wav successfully!");
-
-            let wavPath = "uploads/wav/" + fileName + ".wav"
-            let midiSavePath = "uploads/midi/" + fileName + ".mid"
-            let cmdMidi = "audio-to-midi " + wavPath + " " + "-o " + midiSavePath + " --time-window 480 --activation-level 0.0 -s -c";
-            console.log("Running: " + cmdMidi);
-            exec(cmdMidi, (error, stdout, stderr) => {
-                if (error) {
-                    console.log("Error while converting file to midi!");
-                    console.log(`error: ${error.message}`);
-                    res.send({
-                        "status": "error",
-                        "msg": "Could not convert file to midi.",
-                        "data": {}
-                    });
-                    return;
-                }
-
-                console.log("File converted to .mid successfully!");
-
-                let suggestionsOutputDir = "uploads/suggestion"
-                let cmdGenerateSuggestions = "melody_rnn_generate \\" +
-                    "--config=attention_rnn \\" +
-                    "--run_dir=magenta/melody_rnn/logdir/run1 \\" +
-                    "--output_dir=" + suggestionsOutputDir + " \\" +
-                    "--num_outputs=3 \\" +
-                    "--num_steps=128 \\" +
-                    "--hparams=\"batch_size=64,rnn_layer_sizes=[64,64]\" \\" +
-                    "--primer_midi=" + midiSavePath;
-                
-                console.log("Running: " + cmdGenerateSuggestions);
-                exec(cmdGenerateSuggestions, (error, stdout, stderr) => {
-                    if (error) {
-                        console.log("Error while generating suggestions!");
-                        console.log(`error: ${error.message}`);
-                        res.send({
-                            "status": "error",
-                            "msg": "Could not generate suggestions.",
-                            "data": {}
-                        });
-                        return;
-                    }
-
-                    console.log("Suggestions successfully generated!");
-                    console.log("==================================================");
-                });
-            });
-        });
-    }
 }
