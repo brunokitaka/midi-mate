@@ -196,6 +196,7 @@ module.exports = function (app) {
     app.post('/deleteIdeaWeb',
         [
             check('idIdeaWeb', 'Invalid ID!').not().isEmpty().isNumeric(),
+            check('name', 'Invalid name!').not().isEmpty().escape()
         ],
         function (req, res) {
             /* Gets isValid() instance. */

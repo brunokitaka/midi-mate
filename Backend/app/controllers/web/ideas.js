@@ -28,7 +28,7 @@ module.exports.insertIdeaWeb = function (app, req, res, ideaInfo, savePath) {
 		if (error) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: insertIdeaWeb");
 			console.log("Msg: Error while inserting new idea!");
 			console.log("Error(insertIdea): " + error);
@@ -43,7 +43,7 @@ module.exports.insertIdeaWeb = function (app, req, res, ideaInfo, savePath) {
 		else if (empty(result)) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: insertIdeaWeb");
 			console.log("Msg: Error while inserting new idea!");
 			console.log("Error(insertIdea): Result is empty " + result.rows);
@@ -90,7 +90,7 @@ module.exports.selectUserIdeas = function (app, req, res) {
 		if (error) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: selectUserIdeas");
 			console.log("Msg: Error while searching for ideas!");
 			console.log("Error(selectUserIdeas): " + error);
@@ -105,7 +105,7 @@ module.exports.selectUserIdeas = function (app, req, res) {
 		else if (empty(result)) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: selectUserIdeas");
 			console.log("Msg: No idea was found!");
 			console.log("Error(selectUserIdeas): Result is empty " + result.rows);
@@ -155,7 +155,7 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 		if (error) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: deleteIdeaWeb");
 			console.log("Msg: Error while deleting idea!");
 			console.log("Error(deleteIdea): " + error);
@@ -170,7 +170,7 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 		else if (empty(result)) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: deleteIdeaWeb");
 			console.log("Msg: No idea was deleted!");
 			console.log("Error(deleteIdea): Result is empty " + result.rows);
@@ -180,16 +180,23 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
             res.send(returnPacket);
             return;
 		} else {
-			
-			let wavFilePath = "uploads/wav/" + req.session.idUser + "-" + idea.name + ".wav";
-			let rawFilePath = "uploads/raw/" + req.session.idUser + "-" + idea.name + ".m4a";		
+					
 			let midiFilePath = "uploads/midi/" + req.session.idUser + "-" + idea.name + ".mid";
 			let suggestionsFolderPath = "uploads/suggestion/" + idea.idIdeaApp + "/";
 
-			fs.unlinkSync(wavFilePath);
-			fs.unlinkSync(rawFilePath);		
-			fs.unlinkSync(midiFilePath);
-			rimraf.sync(suggestionsFolderPath);
+			try{	
+				fs.unlinkSync(midiFilePath);
+				rimraf.sync(suggestionsFolderPath);
+			}
+			catch(error){
+				console.log("==================================================");
+				console.log("DateTime: " + Date(Date.now()).toString());
+				console.log("Email: " + req.session.email);
+				console.log("Controller: deleteIdeaWeb");
+				console.log("Msg: Error whiile deleting files!");
+				console.log("Error: " + error);
+				console.log("==================================================\n");
+			}
 			
 			/* Response. */
             returnPacket.status = "success";

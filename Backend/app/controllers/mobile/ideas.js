@@ -128,10 +128,21 @@ module.exports.deleteIdea = function (app, req, res) {
 			let midiFilePath = "uploads/midi/" + req.session.idUser + "-" + idea.name + ".mid";
 			let suggestionsFolderPath = "uploads/suggestion/" + idea.idIdeaApp + "/";
 
-			fs.unlinkSync(wavFilePath);
-			fs.unlinkSync(rawFilePath);		
-			fs.unlinkSync(midiFilePath);
-			rimraf.sync(suggestionsFolderPath);
+			try{
+				fs.unlinkSync(wavFilePath);
+				fs.unlinkSync(rawFilePath);		
+				fs.unlinkSync(midiFilePath);
+				rimraf.sync(suggestionsFolderPath);
+			}
+			catch(error){
+				console.log("==================================================");
+				console.log("DateTime: " + Date(Date.now()).toString());
+				console.log("Email: " + req.session.userEmail);
+				console.log("Controller: deleteIdeaMobile");
+				console.log("Msg: Error whiile deleting files!");
+				console.log("Error: " + error);
+				console.log("==================================================\n");
+			}
 			
 			/* Response. */
             returnPacket.status = "success";

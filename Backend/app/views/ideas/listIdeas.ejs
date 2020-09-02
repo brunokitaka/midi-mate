@@ -197,6 +197,35 @@
             });
     }
 
+    function deleteIdea(idIdea, ideaName){
+        if(confirm("By deleting idea all content as recording and midi files will be deleted permanently!")){
+            axios.post('deleteIdeaWeb', {"idIdeaWeb":idIdea, "name":ideaName})
+            .then(function (response) {                
+                if (response.data.status == "success") {
+                    alert(response.data.msg);
+                } else {
+                    
+                    let msg = response.data.msg;
+                    
+                    if (Array.isArray(response.data.msg)) {
+                        msg = "";
+                        for (const i in response.data.msg) {
+                            msg += response.data.msg[i].msg;
+                            msg += "\n";
+                        }
+                    }
+                    alert(msg);
+                    selectUserIdeas();
+                }
+            })
+            .catch(function (error) {
+                /*Tratamento de erro.*/
+                alert("ERROR");
+                console.log(error);
+            });
+        }
+    }
+
     
     function templateHeaderIdea() {
         // return `
@@ -210,6 +239,7 @@
             <th>Name</th>
             <th style="color: white"></th>
             <th style="color: white"></th>
+            <th></th>
             <th></th>
             `;
     }
@@ -226,14 +256,32 @@
         //             <i class="btn fas fa-trash btn-danger" onClick=""></i>
         //         </td>
         //     `;
-        return `
-            <td>${idea.ideaName}</td>
-            <td style="color: white"></td>
-            <td style="color: white"></td>
-            <td style="padding-left: 55%">
-                <i class="btn fas fa-search blue-parkeen-back" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
-            </td>
+        if(idea.ideaSource == 1){
+            return `
+                <td>${idea.ideaName}</td>
+                <td style="color: white"></td>
+                <td style="color: white"></td>
+                <td>
+                    <i class="btn fas fa-search blue-parkeen-back" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+                </td>
+                <td>
+                    <i class="btn fas fa-trash btn-danger" disabled></i>
+                </td>
             `;
+        }
+        if(idea.ideaSource == 2){
+            return `
+                <td>${idea.ideaName}</td>
+                <td style="color: white"></td>
+                <td style="color: white"></td>
+                <td>
+                    <i class="btn fas fa-search blue-parkeen-back" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+                </td>
+                <td>
+                    <i class="btn fas fa-trash btn-danger" onClick="deleteIdea(${idea.idIdea},'${idea.ideaName}')"></i>
+                </td>
+            `;
+        }
     }
 
 
