@@ -114,10 +114,10 @@
     }
 
     /**
-     * SELECT FILES:
-     * List idea's files for download.
+     * SELECT FILES APP:
+     * List idea's files from app for download.
      */
-    function selectFiles(idIdea, ideaName, ideaPath) {
+    function selectFilesApp(idIdea, ideaName, ideaPath) {
         let idea = {
             "idIdea":idIdea,
             "ideaName":ideaName,
@@ -158,6 +158,47 @@
         });
     }
 
+    /**
+     * SELECT FILES WEB:
+     * List idea's files from web for download.
+     */
+     function selectFilesWeb(idIdea, ideaName, ideaPath) {
+        let idea = {
+            "idIdea":idIdea,
+            "ideaName":ideaName,
+            "ideaPath":ideaPath
+        };
+
+        const list = document.getElementById("list");
+        const tableHeader = document.getElementById("tableHeader");
+
+        const backButton = document.getElementById("back-button");
+        const backDiv = document.getElementById("back-div");
+
+        backButton.style.display = "";
+        backDiv.style.display = "";
+
+        list.innerHTML = "";
+        tableHeader.innerHTML = "";
+
+        tableHeader.innerHTML = templateHeaderFile(ideaName);
+
+        let files = [
+            {
+                name: idea.ideaName + " (Original midi)",
+                type: "1"
+            }, 
+            {
+                name: idea.ideaName + " (Suggestions - Zip)",
+                type: "2"
+            }
+        ];
+
+        files.forEach(element => {
+            list.innerHTML += templateListFile(element, idea);
+        });
+    }
+
     function downloadFile(link, filename, type) {
         console.log(link);
         axios.get(link, {responseType: 'arraybuffer'})
@@ -168,6 +209,15 @@
                     const link = document.createElement('a');
                     link.href = url;
                     link.setAttribute('download', filename + '.wav');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                }
+                else if(type == 1){
+                    const url = window.URL.createObjectURL(new Blob([response.data]), { type: 'audio/midi' });
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', filename + '.mid');
                     document.body.appendChild(link);
                     link.click();
                     link.remove();
@@ -206,8 +256,7 @@
                             msg += "\n";
                         }
                     }
-                    alert(msg);
-                    selectUserIdeas();
+                    window.location.reload()
                 }
             })
             .catch(function (error) {
@@ -254,7 +303,7 @@
                 <td style="color: white"></td>
                 <td style="color: white"></td>
                 <td>
-                    <i class="btn fas fa-search blue-parkeen-back" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+                    <i class="btn fas fa-search blue-parkeen-back" onClick="selectFilesApp(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
                 </td>
                 <td>
                     <i class="btn fas fa-trash btn-danger" disabled></i>
@@ -267,7 +316,7 @@
                 <td style="color: white"></td>
                 <td style="color: white"></td>
                 <td>
-                    <i class="btn fas fa-search blue-parkeen-back" onClick="selectFiles(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
+                    <i class="btn fas fa-search blue-parkeen-back" onClick="selectFilesWeb(${idea.idIdea},'${idea.ideaName}','${idea.ideaPath}')"></i>
                 </td>
                 <td>
                     <i class="btn fas fa-trash btn-danger" onClick="deleteIdea(${idea.idIdea},'${idea.ideaName}')"></i>
