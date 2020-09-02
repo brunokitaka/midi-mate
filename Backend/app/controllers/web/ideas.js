@@ -235,25 +235,6 @@ async function ideaProcessing(savePath, idIdea) {
 		}
 
 		console.log("Suggestions successfully generated!");
-		
-
-		/* Rename magenta output to sequntial numbers (1,2,3) */
-		let renameCmd = "a=1\n" + 
-						"for i in uploads/suggestion/" + idIdea + "/*.mid; do\n" +
-						"new=$(printf \"uploads/suggestion/" + idIdea + "/%d.mid\" \"$a\")\n" +
-						"mv -i -- \"$i\" \"$new\"\n" +
-						"let a=a+1\n" +
-						"done"
-		console.log("Running: " + renameCmd);
-		exec(renameCmd, (error, stdout, stderr) => {
-			console.log(stdout);
-			if(error){
-				console.log("Error while renaming suggestions!");
-				console.log(`error: ${error.message}`);
-				console.log("==================================================");
-			}
-			console.log("Suggestions successfully renamed!");
-			console.log("==================================================");
-		});
+		console.log("==================================================");
 	});
 }

@@ -13,6 +13,7 @@ let upload = multer({
 const {
     exec
 } = require("child_process");
+var zipFolder = require('zip-folder');
 
 module.exports = function (app) {
 
@@ -148,8 +149,8 @@ module.exports = function (app) {
             let type = req.query.type;
             let idIdea = req.query.idIdea;
 
-            console.log(path);
-            console.log(type);
+            // console.log(path);
+            // console.log(type);
 
             switch (type) {
                 /* Original Recording: .wav */
@@ -160,17 +161,29 @@ module.exports = function (app) {
                 case "1":
                     res.download("uploads/midi/" + path + ".mid");
                     break;
-                    /* Suggestion 1: .midi */
-                case "2":
-                    res.download("uploads/suggestion/" + idIdea + "/1.mid");
-                    break;
-                    /* Suggestion 2: .midi */
-                case "3":
-                    res.download("uploads/suggestion/" + idIdea + "/2.mid");
-                    break;
-                    /* Suggestion 3: .midi */
-                case "4":
-                    res.download("uploads/suggestion/" + idIdea + "/3.mid");
+                    /* Suggestions: .zip */
+                case "2":                   
+                    zipFolder("uploads/suggestion/" + idIdea + "/", "uploads/suggestion/" + idIdea + ".zip", function(err) {
+                        if(err) {
+                            console.log("==================================================");
+                            console.log("DateTime: " + Date(Date.now()).toString());
+                            console.log("Email: " + req.session.email);
+                            console.log("Controller: downLoadUserFile");
+                            console.log("Msg: Error whiile zipping folder!");
+                            console.log("Error: " + err);
+                            console.log("==================================================\n");
+                            res.send({
+                                status: "error",
+                                msg: "Error! Try again later..."
+                            })
+                        } else {
+                            console.log('EXCELLENT');
+                            res.on('finish', function() { fs.unlink("uploads/suggestion/" + idIdea + ".zip")});
+                            res.download("uploads/suggestion/" + idIdea + ".zip");
+                        }
+                    });
+
+                    // res.download("uploads/suggestion/" + idIdea + "/1.mid");
                     break;
                 default:
                     res.send({

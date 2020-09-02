@@ -29,7 +29,7 @@ module.exports.insertIdea = function (app, req, res, ideaInfo, savePath, fileNam
 		if (error) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: insertIdea");
 			console.log("Msg: Error while inserting new idea!");
 			console.log("Error(insertIdea): " + error);
@@ -44,7 +44,7 @@ module.exports.insertIdea = function (app, req, res, ideaInfo, savePath, fileNam
 		else if (empty(result)) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: insertIdea");
 			console.log("Msg: Error while inserting new idea!");
 			console.log("Error(insertIdea): Result is empty " + result.rows);
@@ -97,7 +97,7 @@ module.exports.deleteIdea = function (app, req, res) {
 		if (error) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: deleteIdea");
 			console.log("Msg: Error while deleting idea!");
 			console.log("Error(deleteIdea): " + error);
@@ -112,7 +112,7 @@ module.exports.deleteIdea = function (app, req, res) {
 		else if (empty(result)) {
 			console.log("==================================================");
 			console.log("DateTime: " + Date(Date.now()).toString());
-			console.log("Email: " + req.session.userEmail);
+			console.log("Email: " + req.session.email);
 			console.log("Controller: deleteIdea");
 			console.log("Msg: No idea was deleted!");
 			console.log("Error(deleteIdea): Result is empty " + result.rows);
@@ -137,7 +137,7 @@ module.exports.deleteIdea = function (app, req, res) {
 			catch(error){
 				console.log("==================================================");
 				console.log("DateTime: " + Date(Date.now()).toString());
-				console.log("Email: " + req.session.userEmail);
+				console.log("Email: " + req.session.email);
 				console.log("Controller: deleteIdeaMobile");
 				console.log("Msg: Error whiile deleting files!");
 				console.log("Error: " + error);
@@ -213,23 +213,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 				}
 
 				console.log("Suggestions successfully generated!");
-
-				/* Rename magenta output to sequntial numbers (1,2,3) */
-				let renameCmd = "a=1 \n" + 
-						"for i in uploads/suggestion/" + idIdea + "/*.mid; do \n" +
-						"new=$(printf \"uploads/suggestion/" + idIdea + "/%d.mid\" \"$a\") \n" +
-						"mv -i -- \"$i\" \"$new\" \n" +
-						"let a=a+1 \n" +
-						"done"
-				exec(renameCmd, (error, stdout, stderr) => {
-					if(error){
-						console.log("Error while renaming suggestions!");
-						console.log(`error: ${error.message}`);
-						console.log("==================================================");
-					}
-					console.log("Suggestions successfully renamed!");
-					console.log("==================================================");
-				});
+				console.log("==================================================");
 			});
 		});
 	});
