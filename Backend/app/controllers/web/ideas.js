@@ -4,6 +4,7 @@
 const empty = require('is-empty');  /* Check if data's empty. */
 const fs = require("fs");
 const { exec } = require('child_process');
+const rimraf = require("rimraf");
 
 /**
  * SAVE IDEA:
@@ -237,13 +238,15 @@ async function ideaProcessing(savePath, idIdea) {
 		
 
 		/* Rename magenta output to sequntial numbers (1,2,3) */
-		let renameCmd = "a=1 \n" + 
-						"for i in uploads/suggestion/" + idIdea + "/*.mid; do \n" +
-						"new=$(printf \"uploads/suggestion/%d.mid\" \"$a\") \n" +
-						"mv -i -- \"$i\" \"$new\" \n" +
-						"let a=a+1 \n" +
+		let renameCmd = "a=1\n" + 
+						"for i in uploads/suggestion/" + idIdea + "/*.mid; do\n" +
+						"new=$(printf \"uploads/suggestion/" + idIdea + "/%d.mid\" \"$a\")\n" +
+						"mv -i -- \"$i\" \"$new\"\n" +
+						"let a=a+1\n" +
 						"done"
+		console.log("Running: " + renameCmd);
 		exec(renameCmd, (error, stdout, stderr) => {
+			console.log(stdout);
 			if(error){
 				console.log("Error while renaming suggestions!");
 				console.log(`error: ${error.message}`);

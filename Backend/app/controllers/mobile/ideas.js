@@ -217,7 +217,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 				/* Rename magenta output to sequntial numbers (1,2,3) */
 				let renameCmd = "a=1 \n" + 
 						"for i in uploads/suggestion/" + idIdea + "/*.mid; do \n" +
-						"new=$(printf \"uploads/suggestion/%d.mid\" \"$a\") \n" +
+						"new=$(printf \"uploads/suggestion/" + idIdea + "/%d.mid\" \"$a\") \n" +
 						"mv -i -- \"$i\" \"$new\" \n" +
 						"let a=a+1 \n" +
 						"done"
