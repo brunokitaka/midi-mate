@@ -16,6 +16,7 @@ CREATE TABLE idea(
      ideaPath VARCHAR(100) UNIQUE NOT NULL,
      idUser INT NOT NULL,
      ideaSource INT NOT NULL, -- 1-app, 2-web
+     ideaCluster INT,
      CONSTRAINT fk_idea_id_user
         FOREIGN KEY (idUser) 
         REFERENCES user (idUser)
