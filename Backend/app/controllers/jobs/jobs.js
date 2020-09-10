@@ -30,6 +30,7 @@ let clusteringJob = schedule.scheduleJob("* */1 * * *", async function () {
 
         console.log("Midi features successfully extracted!");
 
+        console.log("Running: kmeans");
         exec("python3 ./clustering/kmeans.py", (error, stdout, stderr) => {
             console.log(stdout)
             if (error) {
@@ -45,7 +46,11 @@ let clusteringJob = schedule.scheduleJob("* */1 * * *", async function () {
             .pipe(csv({ separator: ',' }))
             .on('data', (data) => results.push(data))
             .on('end', () => {
-                console.log(results);
+                // console.log(results);
+                axios.post("http://localhost:3000/sendClusters", {"clusters":results}).then().catch(function(error){
+                    console.log("Error on axios!");
+                    console.log(error);
+                });
             });
         });	
 	});

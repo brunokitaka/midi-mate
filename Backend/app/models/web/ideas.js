@@ -31,6 +31,13 @@ model.prototype.deleteIdea = function (idea, callback) {
 	this._connection.query('DELETE FROM idea WHERE idIdea = ' + idea.idIdeaWeb + " AND idUser = " + idea.idUser, callback);
 }
 
+/**
+ * INSERT CLUSTERS:
+ * Inserts all clusters.
+ */
+model.prototype.insertClusters = function (query, callback) {
+	this._connection.query(query, callback);
+}
 
 module.exports = function () {
 	return model;

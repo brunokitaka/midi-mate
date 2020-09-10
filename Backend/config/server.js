@@ -28,7 +28,9 @@ app.use(express.static('./app/public'));
 app.use(bodyParser.urlencoded({extended: false }));
 
 /* Sets the arriving data as JSON. */
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+	limit: '50mb'
+}));
 
 /**
  * Sets the session configurations.
