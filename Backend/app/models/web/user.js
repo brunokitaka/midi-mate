@@ -54,6 +54,15 @@ model.prototype.getUserInfo = function (user, callback) {
     this._connection.query('SELECT * FROM user WHERE idUser = ' + user, callback);
 }
 
+/**
+ * UPDATE CLUSTERS:
+ * Updates all user's clusters.
+ */
+model.prototype.updateClusters = function (user, callback) {
+    console.log("CALLING PROCEDURE");
+    this._connection.query("CALL CLUSTERUSER()",callback);
+}
+
 module.exports = function () {
 	return model;
 };

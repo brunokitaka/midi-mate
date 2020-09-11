@@ -52,8 +52,37 @@ module.exports.sendClusters = function (app, req, res) {
 			console.log("==================================================");
 			console.log("Clusters successfully inserted into DB!");
             console.log("==================================================\n");
-            
-            return;			
+
+            const userModel = new app.app.models.web.user(connection);
+
+            userModel.updateClusters(function (error, result) {
+				/* Checks for error. */
+				if (error) {
+					console.log("==================================================");
+					console.log("DateTime: " + Date(Date.now()).toString());
+					console.log("Email: " + req.session.email);
+					console.log("Controller: sendClusters");
+					console.log("Msg: Error while updating user clusters!");
+					console.log("Error(updateClusters): " + error);
+					console.log("==================================================\n");
+					return;
+				} 
+				/* Checks if database response is empty. */
+				else if (empty(result)) {
+					console.log("==================================================");
+					console.log("DateTime: " + Date(Date.now()).toString());
+					console.log("Email: " + req.session.email);
+					console.log("Controller: sendClusters");
+					console.log("Msg: Error while updating user clusters!");
+					console.log("Error(updateClusters): Result is empty " + result.rows);
+					console.log("==================================================\n");
+					return;
+				} else {
+					console.log("==================================================");
+					console.log("Users clusters successfully updated!");
+					console.log("==================================================\n");
+				}
+			});		
 		}
 	});
 }
