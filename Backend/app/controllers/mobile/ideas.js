@@ -196,11 +196,6 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 			if (error) {
 				console.log("Error while converting file to midi!");
 				console.log(`error: ${error.message}`);
-				res.send({
-					"status": "error",
-					"msg": "Could not convert file to midi.",
-					"data": {}
-				});
 				return;
 			}
 
@@ -221,11 +216,6 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 				if (error) {
 					console.log("Error while generating suggestions!");
 					console.log(`error: ${error.message}`);
-					res.send({
-						"status": "error",
-						"msg": "Could not generate suggestions.",
-						"data": {}
-					});
 					return;
 				}
 
