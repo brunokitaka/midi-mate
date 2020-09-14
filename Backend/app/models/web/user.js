@@ -9,9 +9,10 @@ function model(connection) {
  */
 model.prototype.insertUser = function (user, callback) {
     this._connection.query(
-        'INSERT INTO user (userName, userEmail, userPassword) VALUES (' +
+        'INSERT INTO user (userName, userEmail, userSc, userPassword) VALUES (' +
         '\'' + user.userName     + '\', ' +
         '\'' + user.userEmail    + '\', ' +
+        '\'' + user.userSc       + '\', ' +
         '\'' + user.userPassword + '\')',
         callback
     );
@@ -26,6 +27,7 @@ model.prototype.updateUserWithPassword = function (user, callback) {
         'UPDATE user SET ' +
         'userName     = \'' + user.userName     + '\', ' +
         'userEmail    = \'' + user.userEmail    + '\', ' +
+        'userSC       = \'' + user.userSc    + '\', ' +
         'userPassword = \'' + user.userPassword + '\' ' +
         'WHERE idUser = ' + user.idUser,
         callback
@@ -41,6 +43,7 @@ model.prototype.updateUserWithoutPassword = function (user, callback) {
         'UPDATE user SET ' +
         'userName     = \'' + user.userName     + '\', ' +
         'userEmail    = \'' + user.userEmail    + '\' ' +
+        'userSc       = \'' + user.userSc       + '\' ' +
         'WHERE idUser = ' + user.idUser,
         callback
     );

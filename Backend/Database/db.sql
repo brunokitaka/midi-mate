@@ -5,7 +5,7 @@ CREATE TABLE user(
      idUser INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
      userName VARCHAR(100) NOT NULL,   
      userEmail VARCHAR(100) UNIQUE NOT NULL,
-     userInstagram VARCHAR(100) UNIQUE,
+     userSc VARCHAR(100) UNIQUE,
      userPassword VARCHAR(256) NOT NULL,
      userCluster INT
 );

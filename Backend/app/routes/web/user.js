@@ -45,6 +45,7 @@ module.exports = function (app) {
         check('userName', 'Invalid name!').not().isEmpty().escape(),
         check('userEmail', 'Invalid email!').not().isEmpty().isEmail(), 
         check('userPassword', 'Invalid password!').not().isEmpty().isLength({ min: 8 }),
+        check('userSc', 'Invalid link to SoundCloud!').not().isEmpty(),
     ], 
     function (req, res) {
         /* Receives data validation errors, if any. */
@@ -90,7 +91,8 @@ module.exports = function (app) {
         [
             check('userName', 'Invalid Name!').not().isEmpty().escape(),
             check('userEmail', 'Invalid email!').not().isEmpty().isEmail(), 
-            check('userPassword', 'Invalid password!').not().isEmpty().isLength({ min: 8 })
+            check('userPassword', 'Invalid password!').not().isEmpty().isLength({ min: 8 }),
+            check('userSc', 'Invalid link to SoundCloud!').not().isEmpty(),
         ], 
     function (req, res) {
         /* Gets isValid() instance. */
@@ -125,7 +127,8 @@ module.exports = function (app) {
     app.post('/updateUserWithoutPassword', 
         [
             check('userName', 'Invalid Name!').not().isEmpty().escape(),
-            check('userEmail', 'Invalid email!').not().isEmpty().isEmail()
+            check('userEmail', 'Invalid email!').not().isEmpty().isEmail(),
+            check('userSc', 'Invalid link to SoundCloud!').not().isEmpty(),
         ], 
     function (req, res) {
         /* Gets isValid() instance. */

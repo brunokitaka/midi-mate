@@ -49,6 +49,10 @@
                     <input type="email" name="userEmail" id="userEmail" class="form-control" maxlength="50" required>
                 </div>
                 <div class="form-group">
+                    <label><i class="fab fa-soundcloud"></i> SoundCloud link</label>
+                    <input type="text" name="sc" id="sc" class="form-control" maxlength="100" required>
+                </div>
+                <div class="form-group">
                     <label><i class="fas fa-key"></i> Password</label>
                     <input type="password" name="userPassword" id="userPassword" class="form-control" minlength="8" required>
                 </div>
@@ -80,7 +84,8 @@
             let user = {
                 userName: document.getElementById("userName").value,
                 userEmail: document.getElementById("userEmail").value,
-                userPassword: document.getElementById("userPassword").value
+                userPassword: document.getElementById("userPassword").value,
+                userSc: document.getElementById("sc").value
             }
             
             console.log(user);
