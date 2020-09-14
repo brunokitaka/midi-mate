@@ -71,7 +71,7 @@ model.prototype.updateClusters = function (user, callback) {
  * Get user's recommendations.
  */
 model.prototype.getRecommendations = function (user, cluster, callback) {
-    this._connection.query("SELECT * from user WHERE idCluster = ",callback);
+    this._connection.query("SELECT * from user WHERE userCluster = " + cluster + " AND idUser != " + user, callback);
 }
 
 module.exports = function () {

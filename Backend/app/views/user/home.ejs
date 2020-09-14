@@ -44,7 +44,7 @@
                     if (response.data.status == "success") {
                         document.getElementById("title").hidden = false;
                         let data = response.data.data; 
-                        products.innerHTML = "";
+                        recommendations.innerHTML = "";
                         data.forEach(element => {
                             recommendations.innerHTML += templateCardRecommendations(element);
                         });
@@ -65,9 +65,9 @@
     function templateCardRecommendations(user) {
             return `
                 <div class="card" style="width: 18rem; margin: 1%">
-                    <i class="fab fa-soundcloud" style="width:150%" style="color:orange"></i>
+                    <i class="fab fa-soundcloud fa-7x" style="color:orange"></i>
                     <div class="card-body">
-                        <h5 class="card-title">${user.userName}</h5>
+                        <h5 class="card-title" style="color:black !important">${user.userName}</h5>
                         <a href="${user.userSc}" class="btn blue-parkeen-back" style="margin-right:5px">Visit</a>
                     </div>
                 </div>
