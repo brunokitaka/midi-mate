@@ -269,3 +269,71 @@ module.exports.getUserInfo = function (app, req, res) {
 	});
 }
 
+
+/**
+ * GET RECOMMENDATIONS:
+ * Get user's recommendations.
+ */
+module.exports.getRecommendations = function (app, req, res) {
+
+	/* Return packet standard composition. */
+	let returnPacket = {
+		"status": "",
+		"msg": "",
+		"data": {}
+	};
+
+	if(req.session.cluster == -1){
+		returnPacket.status = "none";
+		returnPacket.msg = "Error, no recommendation was found!";
+		res.send(returnPacket);
+	}
+	else{
+		/* Database connection. */
+		const connection = app.config.dbConnection();
+		const model = new app.app.models.web.user(connection);
+
+		/* Calls query for insert user in database. */
+		model.getRecommendations(req.session.idUser, req.session.cluster, function (error, result) {
+
+			/* Checks for error. */
+			if (error) {
+				console.log("==================================================");
+				console.log("DateTime: " + Date(Date.now()).toString());
+				console.log("Email: " + req.session.email);
+				console.log("Controller: getRecommendations");
+				console.log("Msg: Database error while searching for recommendations!");
+				console.log("Error(getRecommendations): " + error);
+				console.log("==================================================\n");
+				returnPacket.status = "error";
+				returnPacket.msg = "Error while searching for recommendations!";
+				returnPacket.data = error;
+				res.send(returnPacket);
+				return;
+			}
+			/* Checks if database response is empty. */
+			else if (empty(result)) {
+				console.log("==================================================");
+				console.log("DateTime: " + Date(Date.now()).toString());
+				console.log("Email: " + req.session.email);
+				console.log("Controller: getRecommendations");
+				console.log("Msg: Error, no recommendations was found!");
+				console.log("Error(getRecommendations): Result is empty" + result);
+				console.log("==================================================\n");
+				returnPacket.status = "none";
+				returnPacket.msg = "Error, no recommendation was found!";
+				res.send(returnPacket);
+				return;
+			} else {
+
+				/* Response */
+				returnPacket.status = "success";
+				returnPacket.msg = "Recommendations successfully retrieved!";
+				returnPacket.data = result;
+				res.send(returnPacket);
+				return;
+			}
+		});
+	}
+}
+

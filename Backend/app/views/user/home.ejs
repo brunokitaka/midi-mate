@@ -10,6 +10,10 @@
             <br>
             <br>
             <!-- <img src="images/gear.gif" alt="FIBO" style="width: 100% !important; height: 100% !important;"> -->
+            <h2 id="title" style="color:white">You might be interested in:</h2>
+            <div id="rec" style="display: flex; flex-wrap: wrap; justify-content: center;">
+                    
+            </div>
         </div>
     </div>
 </header>
@@ -26,6 +30,50 @@
         });
 
     });
+
+    window.onload = () => {
+        document.getElementById("title").hidden = true;
+        getRecommendations();
+    };
+
+    function getRecommendations(){
+        let recommendations = document.getElementById("rec");
+            axios.get("/getRecommendations")
+                .then(function (response) {
+                    console.log(response.data);
+                    if (response.data.status == "success") {
+                        document.getElementById("title").hidden = false;
+                        let data = response.data.data; 
+                        products.innerHTML = "";
+                        data.forEach(element => {
+                            recommendations.innerHTML += templateCardRecommendations(element);
+                        });
+                    } 
+                    else if (response.data.status == "none") {
+                        return;
+                    }
+                    else {
+                        alert(response.data.msg);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    alert("ERROR" + error);
+                });
+    }
+
+    function templateCardRecommendations(user) {
+            return `
+                <div class="card" style="width: 18rem; margin: 1%">
+                    <i class="fab fa-soundcloud" style="width:150%" style="color:orange"></i>
+                    <div class="card-body">
+                        <h5 class="card-title">${user.userName}</h5>
+                        <a href="${user.userSc}" class="btn blue-parkeen-back" style="margin-right:5px">Visit</a>
+                    </div>
+                </div>
+            `;
+        }
+
 </script>
 
 </html>

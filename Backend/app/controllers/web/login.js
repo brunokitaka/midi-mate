@@ -81,6 +81,12 @@ module.exports.userWebAuth = function (app, req, res) {
 				/* Creates new session. */
 				req.session.email = result[0].userEmail;
 				req.session.idUser = result[0].idUser;
+				if(result[0].userCluster == "" || result[0].userCluster == undefined){
+					req.session.cluster = -1;
+				}
+				else{
+					req.session.cluster = result[0].userCluster;
+				}
 				req.session.token = token.generate(req.session.email + req.session.idUser.toString());
 				
 				/* Response. */

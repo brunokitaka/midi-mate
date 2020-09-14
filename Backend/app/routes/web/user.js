@@ -175,4 +175,23 @@ module.exports = function (app) {
             return;
         }
     });
+
+    /**
+     * GET RECOMMENDATIONS:
+     * Get user's recommendations.
+     */
+    app.get('/getRecommendations', function (req, res) {
+        /* Gets isValid() instance. */
+        const isValid = app.app.controllers.web.login.isValid;
+
+        /* Checks route permission. */
+        if (req.session.token != undefined && isValid(req.session.email + req.session.idUser.toString(), req.session.token)) {
+            app.app.controllers.web.user.getRecommendations(app, req, res);
+        }
+        /* If session is not valid, retuns login page. */
+        else{
+            res.render("./user/login");
+            return;
+        }
+    });
 }

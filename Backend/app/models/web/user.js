@@ -66,6 +66,14 @@ model.prototype.updateClusters = function (user, callback) {
     this._connection.query("CALL CLUSTERUSER()",callback);
 }
 
+/**
+ * GET RECOMMENDATIONS:
+ * Get user's recommendations.
+ */
+model.prototype.getRecommendations = function (user, cluster, callback) {
+    this._connection.query("SELECT * from user WHERE idCluster = ",callback);
+}
+
 module.exports = function () {
 	return model;
 };
