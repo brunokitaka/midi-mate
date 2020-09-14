@@ -6,7 +6,7 @@ CREATE TABLE user(
      userName VARCHAR(100) NOT NULL,   
      userEmail VARCHAR(100) UNIQUE NOT NULL,
      userInstagram VARCHAR(100) UNIQUE,
-     userPassword VARCHAR(256) NOT NULL
+     userPassword VARCHAR(256) NOT NULL,
      userCluster INT
 );
 
@@ -44,7 +44,7 @@ BEGIN
 	SELECT COUNT(*) FROM midimate.user INTO n;
 	SET i=0;
     WHILE i<n DO
-		SELECT ideaCluster, COUNT(ideaCluster) as most INTO @cluster, @counter  FROM idea where idUser = i GROUP BY ideaCluster ORDER BY most DESC LIMIT 1;
+		SELECT ideaCluster, COUNT(ideaCluster) as most INTO @cluster, @counter FROM idea WHERE idUser = i GROUP BY ideaCluster ORDER BY most DESC LIMIT 1;
 		UPDATE midimate.user SET userCluster = (SELECT @cluster) WHERE idUser = i;
 		SET i = i + 1;
 	END WHILE;
