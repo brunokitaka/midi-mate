@@ -202,7 +202,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 
 			console.log("File converted to .mid successfully!");
 
-			let suggestionsOutputDir = "uploads/suggestion" + idIdea;
+			let suggestionsOutputDir = "uploads/suggestion/" + idIdea;
 			let cmdGenerateSuggestions = "melody_rnn_generate \\" +
 				"--config=attention_rnn \\" +
 				"--run_dir=magenta/melody_rnn/logdir/run1 \\" +
