@@ -14,7 +14,7 @@ const csv = require('csv-parser')
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-let clusteringJob = schedule.scheduleJob("* * */1 * * *", async function () {
+let clusteringJob = schedule.scheduleJob("* */5 * * *", async function () {
     // java -Xmx1g -jar jSymbolic2.jar -configrun <ConfigurationFilePath> -csv <SymbolicMusicFileOrDirectoryInputPath> <AceXmlFeatureValuesOutputPath> <AceXmlFeatureDefinitionsOutputPath>
     let extractMidiFeatures = "java -Xmx1g -jar ./clustering/jSymbolic2/dist/jSymbolic2.jar -configrun ./clustering/jSymbolic2/dist/config.txt ./uploads/midi/ ./clustering/extracted_feature_values.xml ./clustering/feature_definitions.xml";
 
