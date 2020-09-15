@@ -229,7 +229,7 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 
 async function ideaProcessing(savePath, idIdea) {
 	let suggestionsOutputDir = "uploads/suggestion/" + idIdea;
-	let cmdGenerateSuggestions = "melody_rnn_generate \\" +
+	let cmdGenerateSuggestions = "/home/ubuntu/miniconda3/envs/magenta/bin/melody_rnn_generate \\" +
 		"--config=attention_rnn \\" +
 		"--run_dir=magenta/melody_rnn/logdir/run1 \\" +
 		"--output_dir=" + suggestionsOutputDir + " \\" +
