@@ -191,7 +191,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 		let wavPath = "uploads/wav/" + fileName + ".wav"
 		let midiSavePath = "uploads/midi/" + fileName + ".mid"
 		// let cmdMidi = "audio-to-midi " + wavPath + " " + "-o " + midiSavePath + " --time-window 480 --activation-level 0.0 -s -c";
-		let cmdMidi = "/home/ubuntu/miniconda3/envs/melodia/bin/python audio_to_midi_melodia.py " + wavPath + " " + midiSavePath + " --smooth 0.25 --minduration 0.1";
+		let cmdMidi = "/home/ubuntu/miniconda3/envs/melodia/bin/python ./audio_to_midi_melodia/audio_to_midi_melodia.py " + wavPath + " " + midiSavePath + " --smooth 0.25 --minduration 0.1";
 		console.log("Running: " + cmdMidi);
 		exec(cmdMidi, (error, stdout, stderr) => {
 			if (error) {
