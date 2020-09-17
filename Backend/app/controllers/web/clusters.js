@@ -52,37 +52,43 @@ module.exports.sendClusters = function (app, req, res) {
 			console.log("==================================================");
 			console.log("Clusters successfully inserted into DB!");
 			console.log("==================================================\n");
+			res.end();
 
-			const userModel = new app.app.models.web.user(connection);
+			// const userModel = new app.app.models.web.user(connection);
 			
-			userModel.getAllIds(function (error, result){
-				/* Checks for error. */
-				if (error) {
-					console.log("==================================================");
-					console.log("DateTime: " + Date(Date.now()).toString());
-					console.log("Email: " + req.session.email);
-					console.log("Controller: sendClusters");
-					console.log("Msg: Error while updating user clusters, IDs!");
-					console.log("Error(getAllIds): " + error);
-					console.log("==================================================\n");
-					return;
-				} 
-				/* Checks if database response is empty. */
-				else if (empty(result)) {
-					console.log("==================================================");
-					console.log("DateTime: " + Date(Date.now()).toString());
-					console.log("Email: " + req.session.email);
-					console.log("Controller: sendClusters");
-					console.log("Msg: Error while updating user clusters, IDs not found!");
-					console.log("Error(getAllIds): Result is empty " + result.rows);
-					console.log("==================================================\n");
-					return;
-				} else {
-					let ids = result;
-					console.log(result);
-					res.end();
-				}
-			});
+			// userModel.getAllIds(function (error, result){
+			// 	/* Checks for error. */
+			// 	if (error) {
+			// 		console.log("==================================================");
+			// 		console.log("DateTime: " + Date(Date.now()).toString());
+			// 		console.log("Email: " + req.session.email);
+			// 		console.log("Controller: sendClusters");
+			// 		console.log("Msg: Error while updating user clusters, IDs!");
+			// 		console.log("Error(getAllIds): " + error);
+			// 		console.log("==================================================\n");
+			// 		return;
+			// 	} 
+			// 	/* Checks if database response is empty. */
+			// 	else if (empty(result)) {
+			// 		console.log("==================================================");
+			// 		console.log("DateTime: " + Date(Date.now()).toString());
+			// 		console.log("Email: " + req.session.email);
+			// 		console.log("Controller: sendClusters");
+			// 		console.log("Msg: Error while updating user clusters, IDs not found!");
+			// 		console.log("Error(getAllIds): Result is empty " + result.rows);
+			// 		console.log("==================================================\n");
+			// 		return;
+			// 	} else {
+			// 		let ids = result;
+			// 		let searchClusterQuery = "";
+					
+			// 		ids.forEach(element => {
+			// 			clusterQuery += "UPDATE user SET userCluster = (SELECT @cluster) WHERE idUser = i;";
+			// 		});
+
+			// 		res.end();
+			// 	}
+			// });
 
             // userModel.updateClusters(function (error, result) {
 			// 	/* Checks for error. */

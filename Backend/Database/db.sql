@@ -51,3 +51,15 @@ CREATE TABLE suggestion(
 -- END $$
 -- DELIMITER ;
 
+DELIMITER $$
+DROP TRIGGER IF EXISTS Tgr_Cluster_Insert$$
+
+CREATE TRIGGER Tgr_Cluster_Insert AFTER UPDATE
+ON idea
+FOR EACH ROW
+BEGIN
+     SELECT ideaCluster, COUNT(ideaCluster) as most INTO @cluster, @counter FROM idea WHERE idUser = NEW.idUser GROUP BY ideaCluster ORDER BY most DESC LIMIT 1;
+	UPDATE user SET userCluster = (SELECT @cluster) WHERE idUser = NEW.idUser;
+END $$
+
+DELIMITER ;
