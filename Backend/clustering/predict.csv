@@ -1,4 +1,4 @@
 ,Unnamed: 0,Range,Mean_Pitch,Major_or_Minor,Chromatic_Motion,Direction_of_Melodic_Motion,Melodic_Pitch_Variety,Note_Density,Average_Note_Duration,Rhythmic_Variability,cluster
-0,/mnt/c/Users/brkit/Desktop/TCC/midi-mate/Backend/./uploads/midi/1-asdasd.mid,15.0,56.0,0.0,0.0,0.4615,2.0,2.9989999999999997,0.2344,0.027360000000000002,1
-1,/mnt/c/Users/brkit/Desktop/TCC/midi-mate/Backend/./uploads/midi/1-newIdea.mid,8.0,55.0,0.0,0.2857,0.4286,2.667,4.333,0.2308,0.03698,0
+0,/mnt/c/Users/brkit/Desktop/TCC/midi-mate/Backend/./uploads/midi/1-asdasd.mid,15.0,56.0,0.0,0.0,0.4615,2.0,2.9989999999999997,0.2344,0.027360000000000002,0
+1,/mnt/c/Users/brkit/Desktop/TCC/midi-mate/Backend/./uploads/midi/1-newIdea.mid,8.0,55.0,0.0,0.2857,0.4286,2.667,4.333,0.2308,0.03698,1
 2,/mnt/c/Users/brkit/Desktop/TCC/midi-mate/Backend/./uploads/midi/1-teste.mid,0.0,45.0,0.0,0.0,0.0,1.0,4.633,0.136,0.02505,2

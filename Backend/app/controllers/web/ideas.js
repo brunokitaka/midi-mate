@@ -231,7 +231,7 @@ async function ideaProcessing(savePath, idIdea) {
 	let suggestionsOutputDir = "uploads/suggestion/" + idIdea;
 	let cmdGenerateSuggestions = "/home/ubuntu/miniconda3/envs/magenta/bin/melody_rnn_generate \\" +
 		"--config=attention_rnn \\" +
-		"--run_dir=magenta/melody_rnn/logdir/run1 \\" +
+		"--run_dir=midimate/melody_rnn/logdir/run1 \\" +
 		"--output_dir=" + suggestionsOutputDir + " \\" +
 		"--num_outputs=3 \\" +
 		"--num_steps=128 \\" +
