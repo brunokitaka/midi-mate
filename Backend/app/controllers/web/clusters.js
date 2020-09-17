@@ -16,7 +16,7 @@ module.exports.sendClusters = function (app, req, res) {
     clusters.forEach(element => {
         let path = element["Unnamed: 0"];
         path = path.split("/");
-		let filename = path[7];
+		let filename = path[8];
 		console.log(filename)
         // filename = filename.split("-");
         // let idUser = filename[0];
