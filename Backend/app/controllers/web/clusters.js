@@ -17,12 +17,11 @@ module.exports.sendClusters = function (app, req, res) {
         let path = element["Unnamed: 0"];
         path = path.split("/");
 		let filename = path[8];
-		console.log(filename)
-        // filename = filename.split("-");
-        // let idUser = filename[0];
-        // let ideaName = filename[1];
-        // ideaName = ideaName.split(".")[0];
-        // query += "UPDATE idea SET ideaCluster = " + element.cluster + " WHERE idUser = " + idUser + " AND ideaName = \"" + ideaName + "\";";
+        filename = filename.split("-");
+        let idUser = filename[0];
+        let ideaName = filename[1];
+        ideaName = ideaName.split(".")[0];
+        query += "UPDATE idea SET ideaCluster = " + element.cluster + " WHERE idUser = " + idUser + " AND ideaName = \"" + ideaName + "\";";
     });
 
 	model.insertClusters(query, function (error, result) {	
