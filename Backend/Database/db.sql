@@ -34,20 +34,20 @@ CREATE TABLE suggestion(
 );
 
 
-DELIMITER $$
-DROP PROCEDURE IF EXISTS CLUSTERUSER$$
+-- DELIMITER $$
+-- DROP PROCEDURE IF EXISTS CLUSTERUSER$$
 
-CREATE PROCEDURE CLUSTERUSER()
-BEGIN
-	DECLARE n INT DEFAULT 0;
-	DECLARE i INT DEFAULT 0;
-	SELECT COUNT(*) FROM midimate.user INTO n;
-	SET i=0;
-    WHILE i<n DO
-		SELECT ideaCluster, COUNT(ideaCluster) as most INTO @cluster, @counter FROM idea WHERE idUser = i GROUP BY ideaCluster ORDER BY most DESC LIMIT 1;
-		UPDATE midimate.user SET userCluster = (SELECT @cluster) WHERE idUser = i;
-		SET i = i + 1;
-	END WHILE;
-END $$
-DELIMITER ;
+-- CREATE PROCEDURE CLUSTERUSER()
+-- BEGIN
+-- 	DECLARE n INT DEFAULT 0;
+-- 	DECLARE i INT DEFAULT 0;
+-- 	SELECT COUNT(*) FROM midimate.user INTO n;
+-- 	SET i=0;
+--     WHILE i<n DO
+-- 		SELECT ideaCluster, COUNT(ideaCluster) as most INTO @cluster, @counter FROM idea WHERE idUser = i GROUP BY ideaCluster ORDER BY most DESC LIMIT 1;
+-- 		UPDATE midimate.user SET userCluster = (SELECT @cluster) WHERE idUser = i;
+-- 		SET i = i + 1;
+-- 	END WHILE;
+-- END $$
+-- DELIMITER ;
 

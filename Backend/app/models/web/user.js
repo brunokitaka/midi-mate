@@ -67,6 +67,14 @@ model.prototype.updateClusters = function (user, callback) {
 }
 
 /**
+ * GET ALL IDS:
+ * Selects all user's ids.
+ */
+model.prototype.getAllIds = function (callback) {
+    this._connection.query("SELECT idUser FROM user",callback);
+}
+
+/**
  * GET RECOMMENDATIONS:
  * Get user's recommendations.
  */
