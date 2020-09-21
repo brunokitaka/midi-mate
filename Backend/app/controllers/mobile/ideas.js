@@ -242,6 +242,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 							fs.mkdirSync(playableOutputDir);
 						}
 						fs.writeFileSync(playableOutputDir + i + '.wav', wavBuffer, {encoding: 'binary'});
+						i++;
 					});
 
 					console.log("Suggestions are now playable!");
