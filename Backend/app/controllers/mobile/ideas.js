@@ -60,7 +60,10 @@ module.exports.insertIdea = function (app, req, res, ideaInfo, savePath, fileNam
 			ideaProcessing(savePath, fileName, result.insertId);
 
             /* Response. */
-            returnPacket.status = "success";
+			returnPacket.status = "success";
+			returnPacket.data = {
+				idIdea: result.insertId,
+			};
             returnPacket.msg = "New idea inserted successfully!";
             res.send(returnPacket);
             return;			
