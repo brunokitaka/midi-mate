@@ -233,7 +233,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 					//listing all files using forEach
 					let i = 1;
 					files.forEach(function (file) {
-						let midiBuffer = fs.readFileSync(file);
+						let midiBuffer = fs.readFileSync(suggestionsOutputDir + "/" + file);
 						let wavBuffer = synth.midiToWav(midiBuffer).toBuffer();
 						fs.writeFileSync(playableOutputDir + i + '.wav', wavBuffer, {encoding: 'binary'});
 					});
