@@ -223,7 +223,7 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 
 				console.log("Suggestions successfully generated!");
 
-				let playableOutputDir = "public/playable/" + idIdea + "/";
+				let playableOutputDir = "app/public/playable/" + idIdea + "/";
 
 				fs.readdir(suggestionsOutputDir, function (err, files) {
 					//handling error
