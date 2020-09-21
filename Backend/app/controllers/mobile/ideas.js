@@ -5,6 +5,7 @@ const empty = require('is-empty');  /* Check if data's empty. */
 var fs = require('fs');
 var rimraf = require("rimraf");
 const { exec } = require('child_process');
+const synth = require('synth-js');
 
 /**
  * SAVE IDEA:
@@ -221,7 +222,25 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 				}
 
 				console.log("Suggestions successfully generated!");
-				console.log("==================================================");
+
+				let playableOutputDir = "public/playable/" + idIdea + "/";
+
+				fs.readdir(suggestionsOutputDir, function (err, files) {
+					//handling error
+					if (err) {
+						return console.log('Unable to scan directory: ' + err);
+					} 
+					//listing all files using forEach
+					let i = 1;
+					files.forEach(function (file) {
+						let midiBuffer = fs.readFileSync(file);
+						let wavBuffer = synth.midiToWav(midiBuffer).toBuffer();
+						fs.writeFileSync(playableOutputDir + i + '.wav', wavBuffer, {encoding: 'binary'});
+					});
+
+					console.log("Suggestions are now playable!");
+					console.log("==================================================");
+				});
 			});
 		});
 	});
