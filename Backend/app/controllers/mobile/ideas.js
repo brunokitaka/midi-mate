@@ -5,6 +5,7 @@ const empty = require('is-empty');  /* Check if data's empty. */
 var fs = require('fs');
 var rimraf = require("rimraf");
 const { exec } = require('child_process');
+const execSync = require('child_process').execSync;
 const synth = require('synth-js');
 
 /**
