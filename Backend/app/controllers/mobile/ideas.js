@@ -242,6 +242,8 @@ async function ideaProcessing(savePath, fileName, idIdea) {
 							fs.mkdirSync(playableOutputDir);
 						}
 						fs.writeFileSync(playableOutputDir + i + '.wav', wavBuffer, {encoding: 'binary'});
+						let wavToMp3 = "ffmpeg -i " + playableOutputDir + i + '.wav ' + playableOutputDir + i + ".mp3";
+						execSync(wavToMp3);
 						i++;
 					});
 
