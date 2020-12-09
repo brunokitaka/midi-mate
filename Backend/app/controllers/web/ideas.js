@@ -247,7 +247,7 @@ async function ideaProcessing(savePath, idIdea, res) {
 			console.log(`error: ${error.message}`);
 			res.send({
 				"status": "error",
-				"msg": "Could not generate suggestions.",
+				"msg": "Could not generate suggestions. Check MIDI file!",
 				"data": {}
 			});
 			return;
