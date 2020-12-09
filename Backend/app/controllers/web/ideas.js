@@ -56,7 +56,7 @@ module.exports.insertIdeaWeb = function (app, req, res, ideaInfo, savePath) {
 		} else {
 			/* Response. */
 			
-			ideaProcessing(savePath, result.insertId);
+			ideaProcessing(savePath, result.insertId, res);
 
             returnPacket.status = "success";
             returnPacket.msg = "New idea inserted successfully!";
@@ -227,7 +227,7 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 	});
 }
 
-async function ideaProcessing(savePath, idIdea) {
+async function ideaProcessing(savePath, idIdea, res) {
 	let suggestionsOutputDir = "uploads/suggestion/" + idIdea;
 	let cmdGenerateSuggestions = "/home/ubuntu/miniconda3/envs/magenta/bin/melody_rnn_generate \\" +
 		"--config=attention_rnn \\" +
