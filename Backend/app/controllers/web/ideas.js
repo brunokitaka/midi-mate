@@ -227,7 +227,7 @@ module.exports.deleteIdeaWeb = function (app, req, res) {
 	});
 }
 
-async function ideaProcessing(savePath, idIdea, res) {
+async function ideaProcessing(savePath, idIdea) {
 	let suggestionsOutputDir = "uploads/suggestion/" + idIdea;
 	let cmdGenerateSuggestions = "/home/ubuntu/miniconda3/envs/magenta/bin/melody_rnn_generate \\" +
 		"--config=attention_rnn \\" +
@@ -245,11 +245,11 @@ async function ideaProcessing(savePath, idIdea, res) {
 		if (error) {
 			console.log("Error while generating suggestions!");
 			console.log(`error: ${error.message}`);
-			res.send({
-				"status": "error",
-				"msg": "Could not generate suggestions. Check MIDI file!",
-				"data": {}
-			});
+			// res.send({
+			// 	"status": "error",
+			// 	"msg": "Could not generate suggestions. Check MIDI file!",
+			// 	"data": {}
+			// });
 			return;
 		}
 
